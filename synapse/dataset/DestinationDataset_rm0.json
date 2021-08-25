@@ -1,0 +1,17 @@
+{
+	"name": "DestinationDataset_rm0",
+	"properties": {
+		"annotations": [],
+		"type": "SqlPoolTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dwh",
+			"table": "Taxi5adf"
+		},
+		"sqlPool": {
+			"referenceName": "DWH",
+			"type": "SqlPoolReference"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

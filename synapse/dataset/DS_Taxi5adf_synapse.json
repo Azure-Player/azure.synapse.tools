@@ -1,0 +1,121 @@
+{
+	"name": "DS_Taxi5adf_synapse",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "synapsesqlplayer-WorkspaceDefaultSqlServer",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"DBName": "dwh"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "vendor_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "pickup_datetime",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "dropoff_datetime",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "passenger_count",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "trip_distance",
+				"type": "decimal",
+				"precision": 12,
+				"scale": 2
+			},
+			{
+				"name": "pickup_longitude",
+				"type": "varchar"
+			},
+			{
+				"name": "pickup_latitude",
+				"type": "varchar"
+			},
+			{
+				"name": "rate_code",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "store_and_fwd_flag",
+				"type": "varchar"
+			},
+			{
+				"name": "dropoff_longitude",
+				"type": "varchar"
+			},
+			{
+				"name": "dropoff_latitude",
+				"type": "varchar"
+			},
+			{
+				"name": "payment_type",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "fare_amount",
+				"type": "decimal",
+				"precision": 9,
+				"scale": 2
+			},
+			{
+				"name": "extra",
+				"type": "decimal",
+				"precision": 9,
+				"scale": 2
+			},
+			{
+				"name": "mta_tax",
+				"type": "decimal",
+				"precision": 9,
+				"scale": 2
+			},
+			{
+				"name": "imp_surcharge",
+				"type": "decimal",
+				"precision": 9,
+				"scale": 2
+			},
+			{
+				"name": "tip_amount",
+				"type": "decimal",
+				"precision": 9,
+				"scale": 2
+			},
+			{
+				"name": "tolls_amount",
+				"type": "decimal",
+				"precision": 9,
+				"scale": 2
+			},
+			{
+				"name": "total_amount",
+				"type": "decimal",
+				"precision": 9,
+				"scale": 2
+			}
+		],
+		"typeProperties": {
+			"schema": "dwh",
+			"table": "taxi5adf"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

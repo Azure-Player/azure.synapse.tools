@@ -1,0 +1,25 @@
+{
+	"name": "SourceDataset_rm0",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLPlayer_SQLServer",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"cw_table": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "Purchasing",
+			"table": {
+				"value": "@dataset().cw_table",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}
