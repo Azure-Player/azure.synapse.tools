@@ -1,9 +1,9 @@
-function Deploy-AdfObjectOnly {
+function Deploy-SynapseObjectOnly {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory = $true)] [AdfObject] $obj
+        [parameter(Mandatory = $true)] [SynapseObject] $obj
     )
-    Write-Debug "BEGIN: Deploy-AdfObjectOnly(obj=$obj)"
+    Write-Debug "BEGIN: Deploy-SynapseObjectOnly(obj=$obj)"
 
     if ($obj.Deployed) { 
         Write-Verbose ("The object is already deployed.")
@@ -11,15 +11,15 @@ function Deploy-AdfObjectOnly {
     }
     #Write-Host "Deploying object: $($obj.Name) ($($obj.DependsOn.Count) dependency/ies)"
     #Write-Verbose "  Type: $($obj.Type)"
-    $adf = $obj.Adf
-    $ResourceGroupName = $adf.ResourceGroupName
-    $DataFactoryName = $adf.Name
+    $synapse = $obj.Synapse
+    $ResourceGroupName = $synapse.ResourceGroupName
+    $DataFactoryName = $synapse.Name
 
     $type = $obj.Type
     if ($type -eq 'SqlPool') {
         Write-Warning -Message 'Deployment of (dedicated) SqlPool is not supported, object must exist prior.'
         $obj.Deployed = $true;
-        Write-Debug "END: Deploy-AdfObjectOnly"
+        Write-Debug "END: Deploy-SynapseObjectOnly"
         return;
     }
 
@@ -154,12 +154,12 @@ function Deploy-AdfObjectOnly {
             -Properties $json `
             -IsFullObject -Force | Out-Null
         }
-        'GlobalParameters'
-        {
-            $adf.GlobalFactory.GlobalParameters = $json
-            $adf.GlobalFactory.body = $body
-            Update-GlobalParameters -adf $adf -targetAdf $targetAdf
-        }
+        # 'GlobalParameters'
+        # {
+        #     $synapse.GlobalFactory.GlobalParameters = $json
+        #     $synapse.GlobalFactory.body = $body
+        #     Update-GlobalParameters -synapse $synapse -targetSynapse $targetSynapse
+        # }
         default
         {
             Write-Error "Type $($obj.Type) is not supported."
@@ -168,6 +168,6 @@ function Deploy-AdfObjectOnly {
 
     $obj.Deployed = $true;
 
-    Write-Debug "END: Deploy-AdfObjectOnly"
+    Write-Debug "END: Deploy-SynapseObjectOnly"
 
 }

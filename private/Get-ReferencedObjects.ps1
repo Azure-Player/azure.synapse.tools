@@ -42,7 +42,7 @@ function Find-RefObject($node, $list) {
 function Get-ReferencedObjects {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory = $true)] [AdfObject] $obj
+        [parameter(Mandatory = $true)] [SynapseObject] $obj
     )
     
     Write-Debug "BEGIN: Get-ReferencedObjects(obj=$obj)"

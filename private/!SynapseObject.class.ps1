@@ -1,11 +1,11 @@
-class AdfObject {
+class SynapseObject {
     [string] $Name
     [string] $Type
     [string] $FileName
     [System.Collections.ArrayList] $DependsOn = @()
     [Boolean] $Deployed = $false
     [Boolean] $ToBeDeployed = $true
-    [Adf] $Adf
+    [Synapse] $Synapse
     [PSCustomObject] $Body
 
     [Boolean] AddDependant ([string]$name, [string]$refType)
@@ -14,7 +14,7 @@ class AdfObject {
         if ($refType.EndsWith('Reference')) {
             $objType = $refType.Substring(0, $refType.Length-9)
         }
-        [AdfObject]::AssertType($objType)
+        [SynapseObject]::AssertType($objType)
         $fullName = "$objType.$name"
         if (!$this.DependsOn.Contains($fullName)) {
             $this.DependsOn.Add( $fullName ) | Out-Null
@@ -35,11 +35,11 @@ class AdfObject {
     [String] AzureResourceName ()
     {
         $resType = Get-AzureResourceType $this.Type
-        $DataFactoryName = $this.Adf.Name
+        $SynapseWorkspaceName = $this.Synapse.Name
         if ($resType -like '*managedPrivateEndpoints') {
-            return "$DataFactoryName/default/$($this.Name)"
+            return "$SynapseWorkspaceName/default/$($this.Name)"
         } else {
-            return "$DataFactoryName/$($this.Name)"
+            return "$SynapseWorkspaceName/$($this.Name)"
         }
     }
 
@@ -87,13 +87,13 @@ class AdfObject {
 
     static AssertType ([string] $Type)
     {
-        if ($Type -notin [AdfObject]::allowedTypes ) { 
-            throw "ADFT0029: Unknown object type: $Type."
+        if ($Type -notin [SynapseObject]::allowedTypes ) { 
+            throw "ASWT0029: Unknown object type: $Type."
         }
     }
 
 }
 
-if (!(Get-Variable ADF_FOLDERS -ErrorAction:SilentlyContinue)) {
-    Set-Variable ADF_FOLDERS -option ReadOnly -value ([AdfObject]::AllowedTypes)
+if (!(Get-Variable SYNAPSE_FOLDERS -ErrorAction:SilentlyContinue)) {
+    Set-Variable SYNAPSE_FOLDERS -option ReadOnly -value ([SynapseObject]::AllowedTypes)
 }    

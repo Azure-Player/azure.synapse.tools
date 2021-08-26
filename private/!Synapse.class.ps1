@@ -1,10 +1,4 @@
-class AdfGlobalProp {
-    [string] $FilePath = ""
-    [string] $body = ""
-    [PSCustomObject] $GlobalParameters
-}
-
-class Adf {
+class Synapse {
     [string] $Name = ""
     [string] $ResourceGroupName = ""
     [string] $Region = ""
@@ -14,17 +8,15 @@ class Adf {
     [System.Collections.ArrayList] $DataFlows = @{}
     [System.Collections.ArrayList] $Triggers = @{}
     [System.Collections.ArrayList] $IntegrationRuntimes = @{}
-    [System.Collections.ArrayList] $Factories = @{}
     [System.Collections.ArrayList] $ManagedVirtualNetwork = @{}
     [System.Collections.ArrayList] $ManagedPrivateEndpoints = @{}
     [System.Collections.ArrayList] $SQLScripts = @{}
     [string] $Location = ""
-    [AdfGlobalProp] $GlobalFactory = [AdfGlobalProp]::new()
-    [AdfPublishOption] $PublishOptions
+    [SynapsePublishOption] $PublishOptions
 
     [System.Collections.ArrayList] AllObjects()
     {
-        return $this.LinkedServices + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.IntegrationRuntimes + $this.Factories + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
+        return $this.LinkedServices + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.SQLScripts + $this.IntegrationRuntimes + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
     }
 
     [hashtable] GetObjectsByFullName([string]$pattern)

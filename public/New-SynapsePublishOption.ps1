@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-Creates an instance of objects with options for publishing ADF.
+Creates an instance of objects with options for publishing Synapse Workspace.
 
 .DESCRIPTION
-Creates an instance of objects with options for publishing ADF.
+Creates an instance of objects with options for publishing Synapse Workspace.
 Use it if you want specify particular behaviour during publish operation.
 
 .PARAMETER FilterFilePath
@@ -15,17 +15,17 @@ Do use + or - character as a prefix of name to control where the rule should be 
 $opt = New-SynapsePublishOption
 $opt.Includes.Add("pipeline.Copy*", "")
 $opt.DeleteNotInSource = $false
-Publish-AdfV2FromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" -Location "$Location" -Stage "UAT" -Option $opt
+Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" -Location "$Location" -Stage "UAT" -Option $opt
 
 .EXAMPLE
 $opt = New-SynapsePublishOption
 $opt.DeleteNotInSource = $false
 $opt.StopStartTriggers = $false
-Publish-AdfV2FromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" -Location "$Location" -Stage "UAT" -Option $opt
+Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" -Location "$Location" -Stage "UAT" -Option $opt
 
 .EXAMPLE
 $opt = New-SynapsePublishOption -FilterFilePath ".\deployment\rules.txt"
-Publish-AdfV2FromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" -Location "$Location" -Stage "UAT" -Option $opt
+Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" -Location "$Location" -Stage "UAT" -Option $opt
 
 .LINK
 Online version: https://github.com/SQLPlayer/azure.datafactory.tools/

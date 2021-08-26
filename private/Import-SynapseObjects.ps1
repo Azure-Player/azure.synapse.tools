@@ -1,7 +1,7 @@
-function Import-AdfObjects {
+function Import-SynapseObjects {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory = $true)] $Adf,
+        [parameter(Mandatory = $true)] $synapse,
         [parameter(Mandatory = $true)] $All,
         [parameter(Mandatory = $true)] [String] $RootFolder,
         [parameter(Mandatory = $true)] [String] $SubFolder
@@ -21,7 +21,7 @@ function Import-AdfObjects {
     Foreach-Object {
         Write-Verbose "- $($_.Name)"
         $txt = Get-Content $_.FullName -Encoding "UTF8"
-        $o = New-Object -TypeName AdfObject 
+        $o = New-Object -TypeName SynapseObject 
         $o.Name = $_.BaseName
         $o.Type = $SubFolder
         $o.FileName = $_.FullName
@@ -30,11 +30,11 @@ function Import-AdfObjects {
         # Discover all referenced objects
         $refs = Get-ReferencedObjects -obj $o
         foreach ($r in $refs) {
-            $oname = [AdfObjectName]::new($r)
+            $oname = [SynapseObjectName]::new($r)
             $o.AddDependant( $oname.Name, $oname.Type )
         }
 
-        $o.Adf = $Adf
+        $o.Synapse = $Synapse
         $All.Add($o)
         Write-Verbose ("- {0} : found {1} dependencies." -f $_.BaseName, $o.DependsOn.Count)
     }

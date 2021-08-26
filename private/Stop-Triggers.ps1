@@ -1,32 +1,32 @@
 function Stop-Triggers {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory = $true)] [Adf] $adf
+        [parameter(Mandatory = $true)] [Synapse] $synapse
     )
     Write-Debug "BEGIN: Stop-Triggers()"
 
     Write-Host "Getting triggers..."
-    $triggersADF = Get-SortedTriggers -DataFactoryName $adf.Name -ResourceGroupName $adf.ResourceGroupName
-    if ($null -ne $triggersADF) 
+    $triggers = Get-SortedTriggers -DataFactoryName $synapse.Name -ResourceGroupName $synapse.ResourceGroupName
+    if ($null -ne $triggers) 
     {
-        # Goal: Stop all active triggers (<>Stopped) present in ADF service
-        $triggersToStop = $triggersADF | Where-Object { $_.RuntimeState -ne "Stopped" } | ToArray
-        $allAdfTriggersArray = $triggersADF | ToArray
-        Write-Host ("The number of triggers to stop: " + $triggersToStop.Count + " (out of $($allAdfTriggersArray.Count))")
+        # Goal: Stop all active triggers (<>Stopped) present in Synapse service
+        $triggersToStop = $triggers | Where-Object { $_.RuntimeState -ne "Stopped" } | ToArray
+        $allTriggersArray = $triggers | ToArray
+        Write-Host ("The number of triggers to stop: " + $triggersToStop.Count + " (out of $($allTriggersArray.Count))")
 
         #Stop all triggers
         if ($null -ne $triggersToStop -and $triggersToStop.Count -gt 0)
         {
             Write-Host "Stopping deployed triggers:"
             $triggersToStop | ForEach-Object { 
-                [AdfObjectName] $oname = [AdfObjectName]::new("trigger.$($_.Name)")
-                $IsMatchExcluded = $oname.IsNameExcluded($adf.PublishOptions)
-                if ($IsMatchExcluded -and $adf.PublishOptions.DoNotStopStartExcludedTriggers) {
+                [SynapseObjectName] $oname = [SynapseObjectName]::new("trigger.$($_.Name)")
+                $IsMatchExcluded = $oname.IsNameExcluded($synapse.PublishOptions)
+                if ($IsMatchExcluded -and $synapse.PublishOptions.DoNotStopStartExcludedTriggers) {
                     Write-host "- Excluded trigger: $($_.Name)" 
                 } else {
                     Stop-Trigger `
-                    -ResourceGroupName $adf.ResourceGroupName `
-                    -DataFactoryName $adf.Name `
+                    -ResourceGroupName $synapse.ResourceGroupName `
+                    -DataFactoryName $synapse.Name `
                     -Name $_.Name `
                     | Out-Null
                 }

@@ -1,7 +1,7 @@
-function Deploy-AdfObject {
+function Deploy-SynapseObject {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory = $true)] [AdfObject] $obj
+        [parameter(Mandatory = $true)] [SynapseObject] $obj
     )
 
     if ($obj.ToBeDeployed -eq $false) { 
@@ -15,32 +15,32 @@ function Deploy-AdfObject {
     Write-Host "Start deploying object: $($obj.FullName($true)) ($($obj.DependsOn.Count) dependency/ies)"
     Write-Debug ($obj | Format-List | Out-String)
 
-    $adf = $obj.Adf
+    $synapse = $obj.Synapse
 
     if ($obj.DependsOn.Count -gt 0)
     {
         Write-Debug "Checking all dependencies of [$($obj.Name)]..."
         $i = 1
         $obj.DependsOn | ForEach-Object {
-            $on = [AdfObjectName]::new($_)
+            $on = [SynapseObjectName]::new($_)
             $name = $on.Name
             $type = $on.Type
             Write-Verbose ("$i) Depends on: [$type].[$name]")
-            $depobj = Get-AdfObjectByName -adf $adf -name "$name" -type "$type"
+            $depobj = Get-SynapseObjectByName -synapse $synapse -name "$name" -type "$type"
             if ($null -eq $depobj) {
-                if ($adf.PublishOptions.IgnoreLackOfReferencedObject -eq $true) {
-                    Write-Warning "ADFT0006: Referenced object [$type].[$name] was not found. No error raised as user wanted to carry on."
+                if ($synapse.PublishOptions.IgnoreLackOfReferencedObject -eq $true) {
+                    Write-Warning "ASWT0006: Referenced object [$type].[$name] was not found. No error raised as user wanted to carry on."
                 } else {
-                    Write-Error "ADFT0005: Referenced object [$type].[$name] was not found."
+                    Write-Error "ASWT0005: Referenced object [$type].[$name] was not found."
                 }
             } else {
-                Deploy-AdfObject -obj $depobj
+                Deploy-SynapseObject -obj $depobj
             }
             $i++
         }
     }
 
-    Deploy-AdfObjectOnly -obj $obj
+    Deploy-SynapseObjectOnly -obj $obj
 
     Write-Host "Finished deploying object: $($obj.FullName($true))"
 

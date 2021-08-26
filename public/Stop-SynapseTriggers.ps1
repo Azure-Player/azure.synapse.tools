@@ -9,12 +9,12 @@ Stops (disables) all triggers in Azure Data Factory instance (service).
 Name of Azure Data Factory service to be affected.
 
 .PARAMETER ResourceGroupName
-Resource Group Name of ADF service to be affected.
+Resource Group Name of Synapse Workspace service to be affected.
 
 .EXAMPLE
 $ResourceGroupName = 'rg-devops-factory'
 $DataFactoryName = "SQLPlayerDemo"
-Stop-AdfTriggers -FactoryName "$DataFactoryName" -ResourceGroupName "$ResourceGroupName"
+Stop-SynapseTriggers -FactoryName "$DataFactoryName" -ResourceGroupName "$ResourceGroupName"
 
 .LINK
 Online version: https://github.com/SQLPlayer/azure.datafactory.tools/
@@ -26,10 +26,10 @@ function Stop-SynapseTriggers {
         [parameter(Mandatory = $true)] [String] $ResourceGroupName
     )
 
-    [Adf] $adf = New-Object 'Adf'
-    $adf.Name = $FactoryName
-    $adf.ResourceGroupName = $ResourceGroupName
+    [Synapse] $synapse = New-Object 'Synapse'
+    $synapse.Name = $FactoryName
+    $synapse.ResourceGroupName = $ResourceGroupName
 
-    Stop-Triggers -adf $adf
+    Stop-Triggers -synapse $synapse
     
 }

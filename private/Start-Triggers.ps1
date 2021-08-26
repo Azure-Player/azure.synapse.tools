@@ -1,26 +1,26 @@
 function Start-Triggers {
     [CmdletBinding()]
     param (
-        [parameter(Mandatory = $true)] [Adf] $adf
+        [parameter(Mandatory = $true)] [Synapse] $synapse
     )
     Write-Debug "BEGIN: Start-Triggers()"
 
-    [AdfObject[]] $activeTrigger = $adf.Triggers `
+    [SynapseObject[]] $activeTrigger = $synapse.Triggers `
     | Where-Object { $_.Body.properties.runtimeState -eq "Started" } | ToArray
     Write-Host ("The number of triggers to start: " + $activeTrigger.Count)
 
     #Start active triggers - after cleanup efforts
     $activeTrigger | ForEach-Object { 
         Write-Host "- Enabling trigger: $($_.Name)"
-        [AdfObjectName] $oname = [AdfObjectName]::new("trigger.$($_.Name)")
-        $IsMatchExcluded = $oname.IsNameExcluded($adf.PublishOptions)
-        if ($IsMatchExcluded -and $adf.PublishOptions.DoNotStopStartExcludedTriggers) {
+        [SynapseObjectName] $oname = [SynapseObjectName]::new("trigger.$($_.Name)")
+        $IsMatchExcluded = $oname.IsNameExcluded($synapse.PublishOptions)
+        if ($IsMatchExcluded -and $synapse.PublishOptions.DoNotStopStartExcludedTriggers) {
             Write-host "- Excluded trigger: $($_.Name)" 
         } else {
             try {
                 Start-AzDataFactoryV2Trigger `
-                    -ResourceGroupName $adf.ResourceGroupName `
-                    -DataFactoryName $adf.Name `
+                    -ResourceGroupName $synapse.ResourceGroupName `
+                    -DataFactoryName $synapse.Name `
                     -Name $_.Name `
                     -Force | Out-Null
             }

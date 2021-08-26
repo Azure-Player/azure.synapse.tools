@@ -1,17 +1,17 @@
 function Update-PropertiesFromFile {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)] [Adf] $adf,
+        [Parameter(Mandatory)] [Synapse] $synapse,
         [Parameter(Mandatory)] [string] $stage,
         [switch] $dryRun = $false
         )
 
-    Write-Debug "BEGIN: Update-PropertiesFromFile(adf=$adf, stage=$stage)"
+    Write-Debug "BEGIN: Update-PropertiesFromFile(synapse=$synapse, stage=$stage)"
 
-    $option = $adf.PublishOptions
-    $srcFolder = $adf.Location
+    $option = $synapse.PublishOptions
+    $srcFolder = $synapse.Location
     if ([string]::IsNullOrEmpty($srcFolder)) {
-        Write-Error "ADFT0011: adf.Location property has not been provided."
+        Write-Error "ASWT0011: synapse.Location property has not been provided."
     }
     
     $ext = "CSV"
@@ -25,13 +25,13 @@ function Update-PropertiesFromFile {
         $configFileName = Join-Path $srcFolder "deployment\config-$stage.csv"
     }
 
-    Write-Verbose "Replacing values for ADF properties from $ext config file"
+    Write-Verbose "Replacing values for SYNAPSE properties from $ext config file"
     Write-Host "Config file:   $configFileName"
 
     if ($ext -eq "CSV") {
         $config = Read-CsvConfigFile -Path $configFileName
     } else {
-        $config = Read-JsonConfigFile -Path $configFileName -adf $adf
+        $config = Read-JsonConfigFile -Path $configFileName -synapse $synapse
     }
     #$config | Out-Host 
 
@@ -62,12 +62,12 @@ function Update-PropertiesFromFile {
             $path = $path.Substring(13) 
         }
 
-        $objArr = Get-AdfObjectByPattern -adf $adf -name $name -type $type
+        $objArr = Get-SynapseObjectByPattern -synapse $synapse -name $name -type $type
         if ($null -eq $objArr) {
             if ($option.FailsWhenConfigItemNotFound -eq $false) {
                 Write-Warning "Could not find object: $type.$name, skipping..."
             } else {
-                Write-Error -Message "ADFT0007: Could not find object: $type.$name"
+                Write-Error -Message "ASWT0007: Could not find object: $type.$name"
             }
         } else {
             Write-Verbose "- Performing: $action for object(path): $type.$name(properties.$path)"
@@ -87,7 +87,7 @@ function Update-PropertiesFromFile {
 function Update-PropertiesForObject {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)]          [AdfObject] $o,
+        [Parameter(Mandatory)]          [SynapseObject] $o,
         [Parameter(Mandatory)]          [string] $action,
         [Parameter(Mandatory)]          [string] $path,
         [Parameter(Mandatory = $false)] [string] $value,
@@ -100,11 +100,11 @@ function Update-PropertiesForObject {
     Write-Debug "BEGIN: Update-PropertiesForObject"
 
     # if ($null -eq $o -and $action -ne "add") {
-    #     Write-Error "ADFT0008: Could not find object: $type.$name"
+    #     Write-Error "ASWT0008: Could not find object: $type.$name"
     # }
     $json = $o.Body | ConvertFrom-ArraysToOrderedHashTables
     if ($null -eq $json) {
-        Write-Error "ADFT0009: Body of the object is empty!"
+        Write-Error "ASWT0009: Body of the object is empty!"
     }
     
     $objName = $o.Name
@@ -125,7 +125,7 @@ function Update-PropertiesForObject {
         if ($option.FailsWhenPathNotFound -eq $false) {
             Write-Warning "Wrong path defined in config for object(path): $type.$name(properties.$path), skipping..."
         } else {
-            $exc = ([System.Data.DataException]::new("ADFT0010: Wrong path defined in config for object(path): $type.$name(properties.$path)"))
+            $exc = ([System.Data.DataException]::new("ASWT0010: Wrong path defined in config for object(path): $type.$name(properties.$path)"))
             Write-Error -Exception $exc
         }
     }
@@ -157,7 +157,7 @@ function Update-PropertiesForObject {
     # Save new file for deployment purposes and change pointer in object instance
     if ($dryRun -eq $False) 
     {
-        $f = (Save-AdfObjectAsFile -obj $o)
+        $f = (Save-SynapseObjectAsFile -obj $o)
         $o.FileName = $f
     }
     

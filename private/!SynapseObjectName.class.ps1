@@ -1,30 +1,30 @@
-class AdfObjectName {
+class SynapseObjectName {
     [string] $Name
     [string] $Type
     [string] $Folder
 
-    AdfObjectName ([string] $Name, [string] $Type) 
+    SynapseObjectName ([string] $Name, [string] $Type) 
     {
-        [AdfObject]::AssertType($Type)
+        [SynapseObject]::AssertType($Type)
         $this.Name = $Name
         $this.Type = $Type
     }
 
-    AdfObjectName ([string] $Name, [string] $Type, [string] $Folder) 
+    SynapseObjectName ([string] $Name, [string] $Type, [string] $Folder) 
     {
-        [AdfObject]::AssertType($Type)
+        [SynapseObject]::AssertType($Type)
         $this.Name = $Name
         $this.Type = $Type
         $this.Folder = $Folder
     }
 
-    AdfObjectName ([string] $FullName) 
+    SynapseObjectName ([string] $FullName) 
     {
         $m = [regex]::matches($FullName, '([a-zA-Z]+)\.([a-zA-Z 0-9\-_]+)@?(.*)')
         if ($m.Success -eq $false) {
-            throw "ADFT0028: Expected format of name for 'FullName' input parameter is: objectType.objectName[@folderName]"
+            throw "ASWT0028: Expected format of name for 'FullName' input parameter is: objectType.objectName[@folderName]"
         }
-        [AdfObject]::AssertType($m.Groups[1].Value)
+        [SynapseObject]::AssertType($m.Groups[1].Value)
         $this.Type = $m.Groups[1].Value
         $this.Name = $m.Groups[2].Value
         $this.Folder = $m.Groups[3].Value
@@ -65,7 +65,7 @@ class AdfObjectName {
         return $null -ne $r
     }
 
-    [Boolean] IsNameExcluded ([AdfPublishOption] $opt)
+    [Boolean] IsNameExcluded ([SynapsePublishOption] $opt)
     {
         $fullname = $this.FullNameWithFolder()
 

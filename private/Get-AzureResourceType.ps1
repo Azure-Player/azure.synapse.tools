@@ -20,7 +20,7 @@ function Get-AzureResourceType {
         'sqlscript'             { $resType = 'Microsoft.Synapse/workspaces/sqlscripts' }
         'managedVirtualNetwork' { $resType = 'Microsoft.Synapse/workspaces/managedVirtualNetworks' }
         'managedVirtualNetwork\default\managedPrivateEndpoint' { $resType = 'Microsoft.Synapse/workspaces/managedVirtualNetworks/managedPrivateEndpoints' }
-        default                 { Write-Error "ADFT0016: Type '$Type' is not supported." }
+        default                 { Write-Error "ASWT0016: Type '$Type' is not supported." }
     }
 
     return $resType
