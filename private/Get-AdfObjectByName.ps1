@@ -39,16 +39,13 @@ function Get-AdfObjectByName {
         {
             $r = $adf.Factories | Where-Object { $_.Name -eq $name } | Select-Object -First 1
         }
-        'SqlPool'
+        'ManagedVirtualNetwork'
         {
-            $r = New-Object -TypeName AdfObject 
-            $r.Name = $name
-            $r.Type = 'SqlPool'
-            $r.Adf  = $adf
+            $r = $adf.ManagedVirtualNetwork | Where-Object { $_.Name -eq $name } | Select-Object -First 1
         }
         default
         {
-            Write-Error "Type [$type] is not supported."
+            Write-Error "ADFT0014: Type [$type] is not supported."
         }
     }
 

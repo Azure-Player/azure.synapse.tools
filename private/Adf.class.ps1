@@ -15,13 +15,16 @@ class Adf {
     [System.Collections.ArrayList] $Triggers = @{}
     [System.Collections.ArrayList] $IntegrationRuntimes = @{}
     [System.Collections.ArrayList] $Factories = @{}
-    [System.Collections.ArrayList] $SqlScripts = @{}
+    [System.Collections.ArrayList] $ManagedVirtualNetwork = @{}
+    [System.Collections.ArrayList] $ManagedPrivateEndpoints = @{}
+    [System.Collections.ArrayList] $SQLScripts = @{}
     [string] $Location = ""
     [AdfGlobalProp] $GlobalFactory = [AdfGlobalProp]::new()
+    [AdfPublishOption] $PublishOptions
 
     [System.Collections.ArrayList] AllObjects()
     {
-        return $this.LinkedServices + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.IntegrationRuntimes + $this.Factories + $this.SqlScripts
+        return $this.LinkedServices + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.IntegrationRuntimes + $this.Factories + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
     }
 
     [hashtable] GetObjectsByFullName([string]$pattern)

@@ -2,12 +2,12 @@ function Read-JsonConfigFile {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)] [string] $Path,
-        [Parameter(Mandatory)] [Adf] $adf,
-        [Parameter(Mandatory)] [SynapsePublishOption] $option
+        [Parameter(Mandatory)] [Adf] $adf
     )
 
     Write-Debug "BEGIN: Read-JsonConfigFile(path=$path)"
     $configFileName = $Path
+    $option = $adf.PublishOptions
 
     Write-Debug "Testing config file..."
     Test-Path -Path $configFileName -PathType Leaf | Out-Null 
@@ -38,7 +38,7 @@ function Read-JsonConfigFile {
                 if ($option.FailsWhenConfigItemNotFound -eq $false) {
                     Write-Warning "Object [$name] could not be found, skipping..."
                 } else {
-                    Write-Error "Object [$name] could not be found."
+                    Write-Error "ADFT0017: Object [$name] could not be found."
                 }
             }
         }

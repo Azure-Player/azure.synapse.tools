@@ -6,4 +6,8 @@ class SynapsePublishOption {
     [Boolean] $CreateNewInstance = $true
     [Boolean] $DeployGlobalParams = $true
     [Boolean] $FailsWhenConfigItemNotFound = $true
+    [Boolean] $FailsWhenPathNotFound = $true
+    [Boolean] $IgnoreLackOfReferencedObject = $false
+    [Boolean] $DoNotStopStartExcludedTriggers = $false
+    [Boolean] $DoNotDeleteExcludedObjects = $true
 }
