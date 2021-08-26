@@ -83,7 +83,7 @@ class SynapseObject {
         return $ofn
     }
 
-    static $AllowedTypes = @('integrationRuntime', 'pipeline', 'dataset', 'dataflow', 'linkedService', 'trigger', 'factory', 'managedVirtualNetwork', 'managedPrivateEndpoint')
+    static $AllowedTypes = @('integrationRuntime', 'pipeline', 'dataset', 'dataflow', 'linkedService', 'trigger', 'sqlscript', 'managedVirtualNetwork', 'managedPrivateEndpoint')
 
     static AssertType ([string] $Type)
     {

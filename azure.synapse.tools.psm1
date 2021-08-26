@@ -1,5 +1,5 @@
 #
-# Script module for module 'Azure.DataFactory.Tools' that is executed when 'Azure.DataFactory.Tools' is imported in a PowerShell session.
+# Script module for module 'Azure.Synapse.Tools' that is executed when 'Azure.Synapse.Tools' is imported in a PowerShell session.
 #
 
 $PSDefaultParameterValues.Clear()

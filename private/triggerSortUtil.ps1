@@ -1,5 +1,5 @@
 function triggerSortUtil {
-    param([Microsoft.Azure.Commands.DataFactoryV2.Models.PSTrigger]$trigger,
+    param([Microsoft.Azure.Commands.Synapse.Models.PSTrigger]$trigger,
     [Hashtable] $triggerNameResourceDict,
     [Hashtable] $visited,
     [System.Collections.Stack] $sortedList)

@@ -21,7 +21,7 @@ DataFlows: 7 object(s) loaded.
 Triggers: 3 object(s) loaded.
 
 .NOTES
-Online version: https://github.com/SQLPlayer/azure.datafactory.tools/
+Online version: https://github.com/SQLPlayer/azure.synapse.tools/
 #>
 function Import-SynapseFromFolder {
     [CmdletBinding()]

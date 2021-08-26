@@ -15,20 +15,20 @@ Do use + or - character as a prefix of name to control where the rule should be 
 $opt = New-SynapsePublishOption
 $opt.Includes.Add("pipeline.Copy*", "")
 $opt.DeleteNotInSource = $false
-Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" -Location "$Location" -Stage "UAT" -Option $opt
+Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -SynapseWorkspaceName "$SynapseWorkspaceName" -Location "$Location" -Stage "UAT" -Option $opt
 
 .EXAMPLE
 $opt = New-SynapsePublishOption
 $opt.DeleteNotInSource = $false
 $opt.StopStartTriggers = $false
-Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" -Location "$Location" -Stage "UAT" -Option $opt
+Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -SynapseWorkspaceName "$SynapseWorkspaceName" -Location "$Location" -Stage "UAT" -Option $opt
 
 .EXAMPLE
 $opt = New-SynapsePublishOption -FilterFilePath ".\deployment\rules.txt"
-Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -DataFactoryName "$DataFactoryName" -Location "$Location" -Stage "UAT" -Option $opt
+Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -SynapseWorkspaceName "$SynapseWorkspaceName" -Location "$Location" -Stage "UAT" -Option $opt
 
 .LINK
-Online version: https://github.com/SQLPlayer/azure.datafactory.tools/
+Online version: https://github.com/SQLPlayer/azure.synapse.tools/
 #>
 function New-SynapsePublishOption {
     [CmdletBinding()]

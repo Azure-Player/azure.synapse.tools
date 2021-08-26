@@ -18,9 +18,9 @@ function Start-Triggers {
             Write-host "- Excluded trigger: $($_.Name)" 
         } else {
             try {
-                Start-AzDataFactoryV2Trigger `
+                Start-AzSynapseTrigger `
                     -ResourceGroupName $synapse.ResourceGroupName `
-                    -DataFactoryName $synapse.Name `
+                    -WorkspaceName $synapse.Name `
                     -Name $_.Name `
                     -Force | Out-Null
             }

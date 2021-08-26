@@ -12,7 +12,6 @@ function Read-JsonConfigFile {
     Write-Debug "Testing config file..."
     Test-Path -Path $configFileName -PathType Leaf | Out-Null 
 
-    #$configFileName = "X:\!WORK\GitHub\!SQLPlayer\azure.datafactory.tools\test\BigFactorySample2\deployment\config-c100.json"
     $configtxt = Get-Content  $configFileName -Raw | Out-String
     $json = ConvertFrom-Json $configtxt 
 

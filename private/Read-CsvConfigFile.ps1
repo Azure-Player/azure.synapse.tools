@@ -26,7 +26,7 @@ function Read-CsvConfigFile {
     $csv | ForEach-Object {
         if ($i -gt 0 -and !$_.type.StartsWith("#") ) {
             if ($_.type -eq "" -or $null -eq $_.type) { Write-Error -Exception ([System.Data.DataException]::new("ASWT0021: Config file, row $i : Value in column 'Type' is empty."))    }
-            if ($_.type -notin $SYNAPSE_FOLDERS)          { Write-Error -Exception ([System.Data.DataException]::new("ASWT0022: Config file, row $i : Type ($($_.type)) is not supported.")) }
+            if ($_.type -notin $SYNAPSE_FOLDERS)      { Write-Error -Exception ([System.Data.DataException]::new("ASWT0022: Config file, row $i : Type ($($_.type)) is not supported.")) }
             if ($_.name -eq "" -or $null -eq $_.name) { Write-Error -Exception ([System.Data.DataException]::new("ASWT0023: Config file, row $i : Value in column 'Name' is empty."))    }
             if ($_.path -eq "" -or $null -eq $_.path) { Write-Error -Exception ([System.Data.DataException]::new("ASWT0024: Config file, row $i : Value in column 'Path' is empty."))    }
             if ($_.value -eq "" -or $null -eq $_.value) { 

@@ -4,7 +4,7 @@ Publishes all Synapse Workspace objects from JSON files into target Synapse Work
 
 .DESCRIPTION
 Publishes all Synapse Workspace objects from JSON files into target Synapse Workspace service.
-Creates a data factory with the specified resource group name and location, if that doesn't exist.
+Creates a Synapse Workspace with the specified resource group name and location, if that doesn't exist.
 Takes care of creating Synapse Workspace, appropriate order of deployment, deleting objects not in the source anymore, replacing properties environment-related based on CSV config file, and more.
 
 .PARAMETER RootFolder
@@ -29,12 +29,12 @@ This objects allows to define certain behaviour of deployment process. Use cmdle
 
 .PARAMETER Method
 Optional parameter. Currently this cmdlet contains two method of publishing: AzSynapse, AzResource (default).
-AzResource method has been introduced due to bugs in Az.DataFactory PS module.
+AzResource method has been introduced due to bugs in Az.Synapse PS module.
 
 .EXAMPLE
 # Publish entire Synapse Workspace
-$ResourceGroupName = 'rg-devops-factory'
-$SynapseWorkspaceName = "SQLPlayerDemo"
+$ResourceGroupName = 'rg-devops'
+$SynapseWorkspaceName = "SQLPlayerSynapseDemo"
 $Location = "NorthEurope"
 $RootFolder = "c:\GitHub\SynapseName\"
 Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -SynapseWorkspaceName "$SynapseWorkspaceName" -Location "$Location"
@@ -103,7 +103,7 @@ function Publish-SynapseFromJson {
     $m = Get-Module -Name "azure.synapse.tools"
     $verStr = $m.Version.ToString(2) + "." + $m.Version.Build.ToString("000");
     Write-Host "======================================================================================";
-    Write-Host "### azure.datafactory.tools                                       Version $verStr ###";
+    Write-Host "### azure.synapse.tools                                            Version $verStr ###";
     Write-Host "======================================================================================";
     Write-Host "Invoking Publish-SynapseFromJson (https://github.com/SQLPlayer/azure.synapse.tools)";
     Write-Host "with the following parameters:";
@@ -151,7 +151,7 @@ function Publish-SynapseFromJson {
     }
 
     Write-Host "===================================================================================";
-    Write-Host "STEP: Reading Azure Data Factory from JSON files..."
+    Write-Host "STEP: Reading Synapse Workspace from JSON files..."
     $synapse = Import-SynapseFromFolder -SynapseWorkspaceName $SynapseWorkspaceName -RootFolder "$RootFolder"
     $synapse.ResourceGroupName = "$ResourceGroupName";
     $synapse.Region = "$Location";
@@ -211,8 +211,8 @@ function Publish-SynapseFromJson {
     
     $elapsedTime = new-timespan $script:StartTime $(get-date)
     Write-Host "==============================================================================";
-    Write-Host "   *****   Azure Data Factory files have been deployed successfully.   *****`n";
-    Write-Host "Data Factory name:  $DataFactoryName";
+    Write-Host "   *****   Synapse Workspace files have been deployed successfully.   *****`n";
+    Write-Host "Synapse Workspace:  $SynapseWorkspaceName";
     Write-Host "Region (Location):  $location";
     Write-Host ([string]::Format("     Elapsed time:  {0:d1}:{1:d2}:{2:d2}.{3:d3}`n", $elapsedTime.Hours, $elapsedTime.Minutes, $elapsedTime.Seconds, $elapsedTime.Milliseconds))
     Write-Host "==============================================================================";

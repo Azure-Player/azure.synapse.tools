@@ -13,7 +13,7 @@ function Deploy-SynapseObjectOnly {
     #Write-Verbose "  Type: $($obj.Type)"
     $synapse = $obj.Synapse
     $ResourceGroupName = $synapse.ResourceGroupName
-    $DataFactoryName = $synapse.Name
+    $SynapseWorkspaceName = $synapse.Name
 
     $type = $obj.Type
     if ($type -eq 'SqlPool') {
@@ -29,9 +29,9 @@ function Deploy-SynapseObjectOnly {
     $json = $body | ConvertFrom-Json
 
     if ($script:PublishMethod -eq "AzResource") { $type = "AzResource" }
-    # Global parameters is being deployed with different method:
-    if ($obj.Type -eq "factory") { $type = "GlobalParameters" }
 
+    
+    
     switch -Exact ($type)
     {
         'integrationRuntime'
@@ -46,7 +46,7 @@ function Deploy-SynapseObjectOnly {
                     
                     Set-AzSynapseIntegrationRuntime `
                     -ResourceGroupName $ResourceGroupName `
-                    -DataFactoryName $DataFactoryName `
+                    -WorkspaceName $SynapseWorkspaceName `
                     -Name $json.name `
                     -Type $json.properties.type `
                     -Description $desc `
@@ -57,7 +57,7 @@ function Deploy-SynapseObjectOnly {
                     Write-Verbose -Message "Integration Runtime type detected: Linked Self-Hosted"
                     Set-AzSynapseIntegrationRuntime `
                     -ResourceGroupName $ResourceGroupName `
-                    -DataFactoryName $DataFactoryName `
+                    -WorkspaceName $SynapseWorkspaceName `
                     -Name $json.name `
                     -Type $json.properties.type `
                     -Description $desc `
@@ -71,7 +71,7 @@ function Deploy-SynapseObjectOnly {
                 $dfp = $computeIR.dataFlowProperties
                 Set-AzSynapseIntegrationRuntime `
                 -ResourceGroupName $ResourceGroupName `
-                -DataFactoryName $DataFactoryName `
+                -WorkspaceName $SynapseWorkspaceName `
                 -Name $json.name `
                 -Type $json.properties.type `
                 -Description $desc `
@@ -88,7 +88,7 @@ function Deploy-SynapseObjectOnly {
         'linkedService'
         {
             Set-AzSynapseLinkedService `
-            -WorkspaceName $DataFactoryName `
+            -WorkspaceName $SynapseWorkspaceName `
             -Name $obj.Name `
             -DefinitionFile $obj.FileName `
             | Out-Null
@@ -96,7 +96,7 @@ function Deploy-SynapseObjectOnly {
         'pipeline'
         {
             Set-AzSynapsePipeline `
-            -WorkspaceName $DataFactoryName `
+            -WorkspaceName $SynapseWorkspaceName `
             -Name $obj.Name `
             -DefinitionFile $obj.FileName `
             | Out-Null
@@ -104,7 +104,7 @@ function Deploy-SynapseObjectOnly {
         'dataset'
         {
             Set-AzSynapseDataset `
-            -WorkspaceName $DataFactoryName `
+            -WorkspaceName $SynapseWorkspaceName `
             -Name $obj.Name `
             -DefinitionFile $obj.FileName `
             | Out-Null
@@ -112,7 +112,7 @@ function Deploy-SynapseObjectOnly {
         'dataflow'
         {
             Set-AzSynapseDataFlow `
-            -WorkspaceName $DataFactoryName `
+            -WorkspaceName $SynapseWorkspaceName `
             -Name $obj.Name `
             -DefinitionFile $obj.FileName `
             | Out-Null
@@ -120,7 +120,7 @@ function Deploy-SynapseObjectOnly {
         'trigger'
         {
             Set-AzSynapseTrigger `
-            -WorkspaceName $DataFactoryName `
+            -WorkspaceName $SynapseWorkspaceName `
             -Name $obj.Name `
             -DefinitionFile $obj.FileName `
             | Out-Null
@@ -128,7 +128,7 @@ function Deploy-SynapseObjectOnly {
         'sqlscript'
         {
             # Set-AzSynapseNotebook `
-            # -WorkspaceName $DataFactoryName `
+            # -WorkspaceName $SynapseWorkspaceName `
             # -Name $obj.Name `
             # -DefinitionFile $obj.FileName `
             # | Out-Null
@@ -137,29 +137,29 @@ function Deploy-SynapseObjectOnly {
                 'Content-Type'  = 'application/json'
                 'Authorization' = 'Bearer ' + $token.Token
             }
-            Invoke-RestMethod -Method PUT -Uri "https://$DataFactoryName.dev.azuresynapse.net/sqlscripts/$($obj.Name)?api-version=2020-12-01" -Body $body -Headers $authHeader
+            Invoke-RestMethod -Method PUT -Uri "https://$SynapseWorkspaceName.dev.azuresynapse.net/sqlscripts/$($obj.Name)?api-version=2020-12-01" -Body $body -Headers $authHeader
         }
         'AzResource'
         {
             $resType = Get-AzureResourceType $obj.Type
 
             Write-Verbose $resType
-            Write-Verbose "$DataFactoryName/$($obj.Name)"
+            Write-Verbose "$SynapseWorkspaceName/$($obj.Name)"
 
             New-AzResource `
             -ResourceType $resType `
             -ResourceGroupName $resourceGroupName `
-            -Name "$DataFactoryName/$($obj.Name)" `
+            -Name "$SynapseWorkspaceName/$($obj.Name)" `
             -ApiVersion "2019-06-01-preview" `
             -Properties $json `
             -IsFullObject -Force | Out-Null
         }
-        # 'GlobalParameters'
-        # {
-        #     $synapse.GlobalFactory.GlobalParameters = $json
-        #     $synapse.GlobalFactory.body = $body
-        #     Update-GlobalParameters -synapse $synapse -targetSynapse $targetSynapse
-        # }
+
+
+
+
+
+
         default
         {
             Write-Error "Type $($obj.Type) is not supported."
