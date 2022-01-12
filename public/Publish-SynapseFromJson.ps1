@@ -155,11 +155,12 @@ function Publish-SynapseFromJson {
     $synapse = Import-SynapseFromFolder -SynapseWorkspaceName $SynapseWorkspaceName -RootFolder "$RootFolder"
     $synapse.ResourceGroupName = "$ResourceGroupName";
     $synapse.Region = "$Location";
+    $synapse.PublishOptions = $opt
     Write-Debug ($synapse | Format-List | Out-String)
 
     # Apply Deployment Options if applicable
     if ($null -ne $Option) {
-        ApplyExclusionOptions -synapse $synapse -option $opt
+        ApplyExclusionOptions -synapse $synapse 
     }
 
     Write-Host "===================================================================================";

@@ -127,17 +127,14 @@ function Deploy-SynapseObjectOnly {
         }
         'sqlscript'
         {
-            # Set-AzSynapseNotebook `
-            # -WorkspaceName $SynapseWorkspaceName `
-            # -Name $obj.Name `
-            # -DefinitionFile $obj.FileName `
-            # | Out-Null
-            $token = Get-AzAccessToken -ResourceUrl 'https://dev.azuresynapse.net'
-            $authHeader = @{
-                'Content-Type'  = 'application/json'
-                'Authorization' = 'Bearer ' + $token.Token
-            }
-            Invoke-RestMethod -Method PUT -Uri "https://$SynapseWorkspaceName.dev.azuresynapse.net/sqlscripts/$($obj.Name)?api-version=2020-12-01" -Body $body -Headers $authHeader
+            # Must write *.sql file as the method accepts the SQL script only 
+            $fileSQL = $obj.FileName.Substring(0, $obj.FileName.Length-'json'.Length) + 'sql'
+            Set-Content -Path $fileSQL -Value $json.properties.content.query -Encoding 'utf8'
+            Set-AzSynapseSqlScript `
+            -WorkspaceName $SynapseWorkspaceName `
+            -Name $obj.Name `
+            -DefinitionFile $fileSQL `
+            | Out-Null
         }
         'AzResource'
         {
