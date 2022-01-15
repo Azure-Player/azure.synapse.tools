@@ -34,6 +34,7 @@ function ApplyExclusionOptions {
         $option.Includes.Keys | ForEach-Object {
             $key = $_
             $synapse.AllObjects() | ForEach-Object {
+                Write-Verbose "--- $($_.name)"
                 [SynapseObject] $o = $_
                 $deployable = $o.IsNameMatch($key)
                 if ($deployable) { $o.ToBeDeployed = $true }

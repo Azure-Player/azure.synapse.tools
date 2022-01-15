@@ -43,6 +43,16 @@ function Get-SynapseObjectByName {
         {
             $r = $synapse.ManagedVirtualNetwork | Where-Object { $_.Name -eq $name } | Select-Object -First 1
         }
+        'SqlPool'
+        {
+            $r = $synapse.SqlPool | Where-Object { $_.Name -eq $name } | Select-Object -First 1
+            if (!$r) {
+                $r = New-Object -TypeName SynapseObject 
+                $r.Name = $name
+                $r.Type = $simtype
+                $r.Deployed = $true
+            }
+        }
         default
         {
             Write-Error "ASWT0014: Type [$type] is not supported."

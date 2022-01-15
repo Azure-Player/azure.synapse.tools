@@ -9,7 +9,6 @@ function Stop-Trigger {
     Write-host "- Disabling trigger: $Name" 
     
     Stop-AzSynapseTrigger `
-    -ResourceGroupName $ResourceGroupName `
     -WorkspaceName $SynapseWorkspaceName `
     -Name $Name `
     -Force | Out-Null

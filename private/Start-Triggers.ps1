@@ -19,7 +19,6 @@ function Start-Triggers {
         } else {
             try {
                 Start-AzSynapseTrigger `
-                    -ResourceGroupName $synapse.ResourceGroupName `
                     -WorkspaceName $synapse.Name `
                     -Name $_.Name `
                     -Force | Out-Null
