@@ -8,6 +8,7 @@ The deployment of these objects:
 - integration runtime
 - linked service
 - pipeline
+- KQL script *
 - SQL script *
 - notebook *
 
@@ -16,7 +17,6 @@ The deployment of these objects:
 ## What is NOT yet supported
 The deployment of these objects:
 - credential
-- KQL script
 - Spark job definition
 
 
