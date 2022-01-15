@@ -8,9 +8,8 @@ The deployment of these objects:
 - integration runtime
 - linked service
 - pipeline
-- SQL script **
-- notebook **
-
+- SQL script *
+- notebook *
 
 > \* via RestAPI only
 
@@ -19,7 +18,6 @@ The deployment of these objects:
 - credential
 - KQL script
 - Spark job definition
-- folder & connection definition for SQL script
 
 
 # Release Notes
