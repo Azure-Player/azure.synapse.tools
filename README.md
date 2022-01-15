@@ -20,6 +20,37 @@ The deployment of these objects:
 - Spark job definition
 - 'AzResource' deployment method 
 
+
+
+# How to start
+
+## Install-Module
+
+To install the module, open PowerShell command line window and run the following lines:
+
+```powershell
+Install-Module -Name azure.synapse.tools -Scope CurrentUser
+Import-Module -Name azure.synapse.tools
+```
+
+If you want to upgrade module from a previous version:
+
+```powershell
+Update-Module -Name azure.synapse.tools
+```
+
+Check your currently available version of module:
+```powershell
+Get-Module -Name azure.synapse.tools
+```
+
+The module is available on [PowerShell Gallery](https://www.powershellgallery.com/packages/azure.synapse.tools).
+
+
+
+
+
+
 # Release Notes
 
 New features, bug fixes and changes [can be found here](https://github.com/SQLPlayer/azure.synapse.tools/blob/master/changelog.md).
