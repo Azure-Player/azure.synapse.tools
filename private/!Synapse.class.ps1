@@ -1,3 +1,17 @@
+class SynapsePublishOption {
+    [hashtable] $Includes = @{}
+    [hashtable] $Excludes = @{}
+    [Boolean] $DeleteNotInSource = $false
+    [Boolean] $StopStartTriggers = $true
+    [Boolean] $CreateNewInstance = $true
+    [Boolean] $DeployGlobalParams = $true
+    [Boolean] $FailsWhenConfigItemNotFound = $true
+    [Boolean] $FailsWhenPathNotFound = $true
+    [Boolean] $IgnoreLackOfReferencedObject = $false
+    [Boolean] $DoNotStopStartExcludedTriggers = $false
+    [Boolean] $DoNotDeleteExcludedObjects = $true
+}
+
 class Synapse {
     [string] $Name = ""
     [string] $ResourceGroupName = ""
@@ -11,12 +25,13 @@ class Synapse {
     [System.Collections.ArrayList] $ManagedVirtualNetwork = @{}
     [System.Collections.ArrayList] $ManagedPrivateEndpoints = @{}
     [System.Collections.ArrayList] $SQLScripts = @{}
+    [System.Collections.ArrayList] $Notebooks = @{}
     [string] $Location = ""
     [SynapsePublishOption] $PublishOptions
 
     [System.Collections.ArrayList] AllObjects()
     {
-        return $this.LinkedServices + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.SQLScripts + $this.IntegrationRuntimes + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
+        return $this.LinkedServices + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.SQLScripts + $this.Notebooks + $this.IntegrationRuntimes + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
     }
 
     [hashtable] GetObjectsByFullName([string]$pattern)

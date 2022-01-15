@@ -4,22 +4,30 @@
 The deployment of these objects:  
 - Workspace instance
 - dataset
+- dataflow
 - integration runtime
 - linked service
 - pipeline
-- SQL script * (via AzSynapse method only)
+- SQL script **
+- notebook **
 
 
-> \* Limited (see below)
+> \* via RestAPI only
 
 ## What is NOT yet supported
 The deployment of these objects:
 - credential
 - KQL script
-- notebook
 - Spark job definition
 - folder & connection definition for SQL script
 
-The deployment of these objects by Az.Resource method:
-- SQL script
 
+# Release Notes
+
+New features, bug fixes and changes [can be found here](https://github.com/SQLPlayer/azure.synapse.tools/blob/master/changelog.md).
+
+# Misc
+
+## New feature requests
+Tell me your thoughts or describe your specific case or problem.  
+For any requests on new features please raise a new issue here: [New issue](https://github.com/SQLPlayer/azure.synapse.tools/issues)  

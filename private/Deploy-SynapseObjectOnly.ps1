@@ -29,9 +29,11 @@ function Deploy-SynapseObjectOnly {
     $json = $body | ConvertFrom-Json
 
     if ($script:PublishMethod -eq "AzResource") { $type = "AzResource" }
+    if ($obj.Type -in ('notebook','sqlscript')) { 
+        $type = $obj.Type 
+        Write-Warning "$($obj.Type)s are being deployed by Rest-API regardless of PublishMethod."
+    }
 
-    
-    
     switch -Exact ($type)
     {
         'integrationRuntime'
@@ -127,14 +129,17 @@ function Deploy-SynapseObjectOnly {
         }
         'sqlscript'
         {
-            # Must write *.sql file as the method accepts the SQL script only 
-            $fileSQL = $obj.FileName.Substring(0, $obj.FileName.Length-'json'.Length) + 'sql'
-            Set-Content -Path $fileSQL -Value $json.properties.content.query -Encoding 'utf8'
-            Set-AzSynapseSqlScript `
-            -WorkspaceName $SynapseWorkspaceName `
-            -Name $obj.Name `
-            -DefinitionFile $fileSQL `
-            | Out-Null
+            $h = Get-RequestHeader
+            $uri = "https://$SynapseWorkspaceName.dev.azuresynapse.net/sqlscripts/$($obj.Name)?api-version=2020-12-01"
+            $r = Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers $h
+            Wait-CompleteOperation -SynapseWorkspaceName $SynapseWorkspaceName -requestHeader $h -operationId $r.operationId -operation 'operationResults' | Out-Null
+        }
+        'notebook'
+        {
+            $h = Get-RequestHeader
+            $uri = "https://$SynapseWorkspaceName.dev.azuresynapse.net/notebooks/$($obj.Name)?api-version=2020-12-01"
+            $r = Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers $h
+            Wait-CompleteOperation -SynapseWorkspaceName $SynapseWorkspaceName -requestHeader $h -operationId $r.operationId -operation 'notebookOperationResults' | Out-Null
         }
         'AzResource'
         {

@@ -18,6 +18,7 @@ function Get-AzureResourceType {
         'linkedService'         { $resType = 'Microsoft.Synapse/workspaces/linkedservices' }
         'trigger'               { $resType = 'Microsoft.Synapse/workspaces/triggers' }
         'sqlscript'             { $resType = 'Microsoft.Synapse/workspaces/sqlscripts' }
+        'notebook'              { $resType = 'Microsoft.Synapse/workspaces/notebooks' }
         'managedVirtualNetwork' { $resType = 'Microsoft.Synapse/workspaces/managedVirtualNetworks' }
         'managedVirtualNetwork\default\managedPrivateEndpoint' { $resType = 'Microsoft.Synapse/workspaces/managedVirtualNetworks/managedPrivateEndpoints' }
         default                 { Write-Error "ASWT0016: Type '$Type' is not supported." }
