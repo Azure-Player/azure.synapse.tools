@@ -24,6 +24,7 @@ class Synapse {
     [System.Collections.ArrayList] $IntegrationRuntimes = @{}
     [System.Collections.ArrayList] $ManagedVirtualNetwork = @{}
     [System.Collections.ArrayList] $ManagedPrivateEndpoints = @{}
+    [System.Collections.ArrayList] $KQLScripts = @{}
     [System.Collections.ArrayList] $SQLScripts = @{}
     [System.Collections.ArrayList] $Notebooks = @{}
     [string] $Location = ""
@@ -31,7 +32,7 @@ class Synapse {
 
     [System.Collections.ArrayList] AllObjects()
     {
-        return $this.LinkedServices + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.SQLScripts + $this.Notebooks + $this.IntegrationRuntimes + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
+        return $this.LinkedServices + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.SQLScripts + $this.KQLScripts+ $this.Notebooks + $this.IntegrationRuntimes + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
     }
 
     [hashtable] GetObjectsByFullName([string]$pattern)

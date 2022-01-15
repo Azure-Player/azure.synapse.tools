@@ -29,7 +29,7 @@ function Deploy-SynapseObjectOnly {
     $json = $body | ConvertFrom-Json
 
     if ($script:PublishMethod -eq "AzResource") { $type = "AzResource" }
-    if ($obj.Type -in ('notebook','sqlscript')) { 
+    if ($obj.Type -in ('notebook', 'sqlscript', 'kqlscript')) { 
         $type = $obj.Type 
         Write-Warning "$($obj.Type)s are being deployed by Rest-API regardless of PublishMethod."
     }
@@ -126,6 +126,13 @@ function Deploy-SynapseObjectOnly {
             -Name $obj.Name `
             -DefinitionFile $obj.FileName `
             | Out-Null
+        }
+        'kqlscript'
+        {
+            $h = Get-RequestHeader
+            $uri = "https://$SynapseWorkspaceName.dev.azuresynapse.net/kqlscripts/$($obj.Name)?api-version=2020-12-01"
+            $r = Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers $h
+            Wait-CompleteOperation -SynapseWorkspaceName $SynapseWorkspaceName -requestHeader $h -operationId $r.operationId -operation 'operationResults' | Out-Null
         }
         'sqlscript'
         {

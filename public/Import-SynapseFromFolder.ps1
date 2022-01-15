@@ -53,6 +53,8 @@ function Import-SynapseFromFolder {
     Write-Host ("Triggers: {0} object(s) loaded." -f $synapse.Triggers.Count)
     Import-SynapseObjects -Synapse $synapse -All $synapse.SqlScripts -RootFolder $RootFolder -SubFolder "sqlscript" | Out-Null
     Write-Host ("SqlScripts: {0} object(s) loaded." -f $synapse.SqlScripts.Count)
+    Import-SynapseObjects -Synapse $synapse -All $synapse.KqlScripts -RootFolder $RootFolder -SubFolder "kqlscript" | Out-Null
+    Write-Host ("KqlScripts: {0} object(s) loaded." -f $synapse.KqlScripts.Count)
     Import-SynapseObjects -Synapse $synapse -All $synapse.Notebooks -RootFolder $RootFolder -SubFolder "notebook" | Out-Null
     Write-Host ("Notebooks: {0} object(s) loaded." -f $synapse.Notebooks.Count)
     Import-SynapseObjects -Synapse $synapse -All $synapse.ManagedVirtualNetwork -RootFolder $RootFolder -SubFolder "managedVirtualNetwork" | Out-Null
