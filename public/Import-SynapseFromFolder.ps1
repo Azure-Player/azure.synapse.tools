@@ -62,6 +62,20 @@ function Import-SynapseFromFolder {
     Import-SynapseObjects -Synapse $synapse -All $synapse.ManagedPrivateEndpoints -RootFolder $RootFolder -SubFolder "managedVirtualNetwork\default\managedPrivateEndpoint" | Out-Null
     Write-Host ("Managed Private Endpoints: {0} object(s) loaded." -f $synapse.ManagedPrivateEndpoints.Count)
 
+    # A workaround of Microsoft's bug - no 'properties' in ManagedVirtualNetwork object
+    if ($synapse.ManagedVirtualNetwork.Count -eq 1) {
+        $o = $synapse.ManagedVirtualNetwork[0]
+        if ($o.Body.PSobject.Properties.Name -notcontains "properties")
+        {
+            Write-Verbose 'Workaround: Addeding empty "properties" node to ManagedVirtualNetwork object...'
+            Set-StrictMode -Version 1.0
+            Add-ObjectProperty    -obj $o.Body -path 'properties.preventDataExfiltration' -value $false -ErrorAction 'Continue'
+            Remove-ObjectProperty -obj $o.Body -path 'properties.preventDataExfiltration'               -ErrorAction 'Continue'
+            $f = (Save-SynapseObjectAsFile -obj $o)
+            $o.FileName = $f
+        }
+    }
+    
     Write-Debug "END: Import-SynapseFromFolder()"
     return $synapse
 }

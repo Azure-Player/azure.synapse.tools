@@ -6,7 +6,7 @@ function Stop-Triggers {
     Write-Debug "BEGIN: Stop-Triggers()"
 
     Write-Host "Getting triggers..."
-    $triggers = Get-SortedTriggers -SynapseWorkspaceName $synapse.Name -ResourceGroupName $synapse.ResourceGroupName
+    $triggers = Get-AzSynapseTrigger -WorkspaceName $synapse.Name
     if ($null -ne $triggers) 
     {
         # Goal: Stop all active triggers (<>Stopped) present in Synapse service

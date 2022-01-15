@@ -27,6 +27,7 @@ class Synapse {
     [System.Collections.ArrayList] $KQLScripts = @{}
     [System.Collections.ArrayList] $SQLScripts = @{}
     [System.Collections.ArrayList] $Notebooks = @{}
+    [System.Collections.ArrayList] $SqlPool = @{}
     [string] $Location = ""
     [SynapsePublishOption] $PublishOptions
 

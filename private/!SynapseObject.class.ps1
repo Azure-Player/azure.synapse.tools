@@ -74,16 +74,16 @@ class SynapseObject {
         $ofn = ''
         if ($this.Body.PSObject.Properties.Name -contains "properties")
         {
-            $o = $this.Body.properties
-            if ($o.PSobject.Properties.Name -contains "folder")
+            $o = $this.Body.Properties
+            if ($o.PSobject.Properties -ne $null -and $o.PSobject.Properties.Name -contains "folder")
             {
-                $ofn = $this.Body.properties.folder.name
+                $ofn = $this.Body.Properties.folder.name
             }
         }
         return $ofn
     }
 
-    static $AllowedTypes = @('integrationRuntime', 'pipeline', 'dataset', 'dataflow', 'linkedService', 'trigger', 'kqlscript', 'sqlscript', 'notebook', 'managedVirtualNetwork', 'managedPrivateEndpoint')
+    static $AllowedTypes = @('integrationRuntime', 'pipeline', 'dataset', 'dataflow', 'linkedService', 'trigger', 'kqlscript', 'sqlscript', 'notebook', 'managedVirtualNetwork', 'managedPrivateEndpoint', 'sqlpool')
 
     static AssertType ([string] $Type)
     {

@@ -18,7 +18,7 @@ The deployment of these objects:
 The deployment of these objects:
 - credential
 - Spark job definition
-
+- 'AzResource' deployment method 
 
 # Release Notes
 

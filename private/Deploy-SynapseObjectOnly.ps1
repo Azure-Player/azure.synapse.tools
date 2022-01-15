@@ -52,7 +52,7 @@ function Deploy-SynapseObjectOnly {
                     -Name $json.name `
                     -Type $json.properties.type `
                     -Description $desc `
-                    | Out-Null
+                    -Force | Out-Null
                 } 
                 else 
                 {
@@ -64,7 +64,7 @@ function Deploy-SynapseObjectOnly {
                     -Type $json.properties.type `
                     -Description $desc `
                     -SharedIntegrationRuntimeResourceId $linkedIR.resourceId `
-                    | Out-Null
+                    -Force | Out-Null
                 }
             }
             elseif ($json.properties.type -eq "Managed") {
@@ -81,7 +81,7 @@ function Deploy-SynapseObjectOnly {
                 -DataFlowTimeToLive $dfp.timeToLive `
                 -DataFlowCoreCount $dfp.coreCount `
                 -Location $computeIR.location `
-                | Out-Null
+                -Force | Out-Null
             }
             else {
                 Write-Error "Deployment for this kind of Integration Runtime is not supported yet."
@@ -105,11 +105,15 @@ function Deploy-SynapseObjectOnly {
         }
         'dataset'
         {
-            Set-AzSynapseDataset `
-            -WorkspaceName $SynapseWorkspaceName `
-            -Name $obj.Name `
-            -DefinitionFile $obj.FileName `
-            | Out-Null
+            # Set-AzSynapseDataset `
+            # -WorkspaceName $SynapseWorkspaceName `
+            # -Name $obj.Name `
+            # -DefinitionFile $obj.FileName `
+            # | Out-Null
+            $h = Get-RequestHeader
+            $uri = "https://$SynapseWorkspaceName.dev.azuresynapse.net/datasets/$($obj.Name)?api-version=2020-12-01"
+            $r = Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers $h
+            Wait-CompleteOperation -SynapseWorkspaceName $SynapseWorkspaceName -requestHeader $h -operationId $r.operationId -operation 'operationResults' | Out-Null
         }
         'dataflow'
         {
@@ -159,7 +163,7 @@ function Deploy-SynapseObjectOnly {
             -ResourceType $resType `
             -ResourceGroupName $resourceGroupName `
             -Name "$SynapseWorkspaceName/$($obj.Name)" `
-            -ApiVersion "2019-06-01-preview" `
+            -ApiVersion "2020-12-01" `
             -Properties $json `
             -IsFullObject -Force | Out-Null
         }
