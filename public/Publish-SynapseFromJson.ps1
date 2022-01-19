@@ -166,7 +166,7 @@ function Publish-SynapseFromJson {
     Write-Host "===================================================================================";
     Write-Host "STEP: Replacing all properties environment-related..."
     if (![string]::IsNullOrEmpty($Stage)) {
-        Update-PropertiesFromFile -synapse $synapse -stage $Stage -option $opt
+        Update-PropertiesFromFile -synapse $synapse -stage $Stage
     } else {
         Write-Host "Stage parameter was not provided - action skipped."
     }
