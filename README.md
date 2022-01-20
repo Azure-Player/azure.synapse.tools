@@ -1,4 +1,5 @@
 # azure.synapse.tools
+<img style="float: right;" src="./images/Azure-Synapse-tools-256-logo.png" width="256px">
 
 ## What is supported
 The deployment of these objects:  
