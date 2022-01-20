@@ -18,10 +18,10 @@ function Start-Triggers {
             Write-host "- Excluded trigger: $($_.Name)" 
         } else {
             try {
-                Start-AzSynapseTrigger `
-                    -WorkspaceName $synapse.Name `
+                Start-Trigger `
+                    -SynapseWorkspaceName $synapse.Name `
                     -Name $_.Name `
-                    -Force | Out-Null
+                    | Out-Null
             }
             catch {
                 Write-Host "Failed starting trigger."

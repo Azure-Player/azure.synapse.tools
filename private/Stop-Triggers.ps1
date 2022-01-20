@@ -10,7 +10,7 @@ function Stop-Triggers {
     if ($null -ne $triggers) 
     {
         # Goal: Stop all active triggers (<>Stopped) present in Synapse service
-        $triggersToStop = $triggers | Where-Object { $_.RuntimeState -ne "Stopped" } | ToArray
+        $triggersToStop = $triggers | Where-Object { $_.Properties.RuntimeState -ne "Stopped" } | ToArray
         $allTriggersArray = $triggers | ToArray
         Write-Host ("The number of triggers to stop: " + $triggersToStop.Count + " (out of $($allTriggersArray.Count))")
 
@@ -25,7 +25,6 @@ function Stop-Triggers {
                     Write-host "- Excluded trigger: $($_.Name)" 
                 } else {
                     Stop-Trigger `
-                    -ResourceGroupName $synapse.ResourceGroupName `
                     -SynapseWorkspaceName $synapse.Name `
                     -Name $_.Name `
                     | Out-Null
