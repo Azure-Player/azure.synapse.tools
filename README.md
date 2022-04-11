@@ -20,7 +20,7 @@ The deployment of these objects:
 - credential
 - Spark job definition
 - 'AzResource' deployment method 
-
+- Apache Spark pools (BigDataPool - #11)
 
 
 # How to start
