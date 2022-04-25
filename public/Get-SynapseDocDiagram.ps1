@@ -13,7 +13,7 @@ Diagram direction: LR - Left to Right (default), TD - Top to Down
 
 .EXAMPLE
 $RootFolder = "c:\GitHub\SynapseCode\"
-$synapse = Import-SynapseFromFolder -RootFolder $RootFolder -FactoryName 'whatever'
+$synapse = Import-SynapseFromFolder -RootFolder $RootFolder -SynapseWorkspaceName 'whatever'
 Get-SynapseDocDiagram -synapse $synapse 
 
 .EXAMPLE
