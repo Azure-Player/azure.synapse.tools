@@ -29,7 +29,7 @@ function Deploy-SynapseObjectOnly {
     $json = $body | ConvertFrom-Json
 
     if ($script:PublishMethod -eq "AzResource") { $type = "AzResource" }
-    if ($obj.Type -in ('notebook', 'sqlscript', 'kqlscript')) { 
+    if ($obj.Type -in ('notebook', 'sqlscript', 'kqlscript', 'sparkJobDefinition')) { 
         $type = $obj.Type 
         Write-Warning "$($obj.Type)s are being deployed by Rest-API regardless of PublishMethod."
     }
@@ -151,6 +151,13 @@ function Deploy-SynapseObjectOnly {
             $uri = "https://$SynapseWorkspaceName.dev.azuresynapse.net/notebooks/$($obj.Name)?api-version=2020-12-01"
             $r = Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers $h
             Wait-CompleteOperation -SynapseWorkspaceName $SynapseWorkspaceName -requestHeader $h -operationId $r.operationId -operation 'notebookOperationResults' | Out-Null
+        }
+        'sparkJobDefinition'
+        {
+            $h = Get-RequestHeader
+            $uri = "https://$SynapseWorkspaceName.dev.azuresynapse.net/sparkJobDefinitions/$($obj.Name)?api-version=2020-12-01"
+            $r = Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers $h
+            Wait-CompleteOperation -SynapseWorkspaceName $SynapseWorkspaceName -requestHeader $h -operationId $r.operationId -operation 'operationResults' | Out-Null
         }
         'AzResource'
         {

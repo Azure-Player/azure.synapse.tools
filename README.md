@@ -12,13 +12,13 @@ The deployment of these objects:
 - KQL script *
 - SQL script *
 - notebook *
+- Spark job definition *
 
 > \* via RestAPI only
 
 ## What is NOT yet supported
 The deployment of these objects:
 - credential
-- Spark job definition
 - 'AzResource' deployment method 
 - Apache Spark pools (BigDataPool - #11)
 
