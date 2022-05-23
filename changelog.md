@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Replacing all properties environment-related fails
 
+## [0.19.0] - 2022-05-23
+* Pretending that Spark pool exists in order to deploy referring objects (#11)
+
 ## [0.18.0] - 2022-01-20
 * Fixed Stop/Start triggers while publishing (#8)
 * Added Start-SynapseTriggers cmdlet
