@@ -9,7 +9,7 @@ function Find-RefObject($node, $list) {
         -and $node.PSobject.Properties.Name -contains 'type') 
     {
         [string] $type = $node.type
-        if ($type.EndsWith('Reference')) {
+        if ($type.EndsWith('Reference') -and $node.referenceName.GetType().Name -notin ('PSCustomObject') ) {
             $type = $type.Substring(0, $type.Length-9)
             #Write-Verbose "$type.$($node.referenceName)"
             $list.Add("$type.$($node.referenceName)") | Out-Null

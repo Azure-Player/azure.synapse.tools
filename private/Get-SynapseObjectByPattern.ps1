@@ -39,6 +39,10 @@ function Get-SynapseObjectByPattern {
         {
             $r = $synapse.SqlScripts | Where-Object { $_.Name -like $name }
         }
+        'Notebook'
+        {
+            $r = $synapse.Notebooks | Where-Object { $_.Name -eq $name }
+        }
         'managedPrivateEndpoint'
         {
             $r = $synapse.ManagedPrivateEndpoints | Where-Object { $_.Name -like $name }

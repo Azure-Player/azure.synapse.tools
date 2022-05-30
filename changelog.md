@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Replacing all properties environment-related fails
 
+## [0.21.0] - 2022-05-30
+* Fixed: Support dynamic references from pipeline's execute notebook activity (#13)
+* Fixed: `Get-SynapseObjectBy` internal functions to support notebooks
+* Added first unit tests
+
 ## [0.20.0] - 2022-05-23
 * Spark Job Definition objects are supported now
 

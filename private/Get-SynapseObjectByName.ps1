@@ -39,6 +39,10 @@ function Get-SynapseObjectByName {
         {
             $r = $synapse.SqlScripts | Where-Object { $_.Name -eq $name } | Select-Object -First 1
         }
+        'Notebook'
+        {
+            $r = $synapse.Notebooks | Where-Object { $_.Name -eq $name } | Select-Object -First 1
+        }
         'ManagedVirtualNetwork'
         {
             $r = $synapse.ManagedVirtualNetwork | Where-Object { $_.Name -eq $name } | Select-Object -First 1

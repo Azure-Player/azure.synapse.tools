@@ -1,0 +1,50 @@
+{
+	"name": "pl_execute_notebook_cicd_dynamic",
+	"properties": {
+		"description": "Pipeline to trigger from Azure DevOps release to execute deployed Spark notebook dynamically",
+		"activities": [
+			{
+				"name": "execute_notebook",
+				"type": "SynapseNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": {
+							"value": "@pipeline().parameters.notebook_name",
+							"type": "Expression"
+						},
+						"type": "NotebookReference"
+					},
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": {
+							"value": "@pipeline().parameters.sparkpool_name",
+							"type": "Expression"
+						},
+						"type": "BigDataPoolReference"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"notebook_name": {
+				"type": "string"
+			},
+			"sparkpool_name": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Lakehouse/Maintenance"
+		},
+		"annotations": []
+	}
+}
