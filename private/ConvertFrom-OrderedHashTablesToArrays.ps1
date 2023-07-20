@@ -32,7 +32,7 @@ function ConvertFrom-OrderedHashTablesToArrays {
 
                 # Without the ForEach-Object we get a OrderedDictionaryKeyValueCollection back, which is not too useful. We need an array, or the JSON
                 # gets saved using the keys as properties instead of an array. The foreeach unboxes back to an array for us.
-                $Item.$prop = $Item.$prop.Values | ForEach-Object { $_ };
+                $Item.$prop = @($Item.$prop.Values | ForEach-Object { $_ });
             }
             elseif ( $Item.$prop.GetType().Name -eq "PSCustomObject" ) {
                 Write-Verbose "Converting PSCustomObject property using a recursive function call...";
