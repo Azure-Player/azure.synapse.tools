@@ -13,7 +13,7 @@ $SynapseWorkspace = "SQLPlayerSynapseDemo"
 Stop-SynapseTriggers -SynapseWorkspace "$SynapseWorkspace"
 
 .LINK
-Online version: https://github.com/SQLPlayer/azure.synapse.tools/
+Online version: https://github.com/Azure-Player/azure.synapse.tools/
 #>
 function Stop-SynapseTriggers {
     [CmdletBinding()]
