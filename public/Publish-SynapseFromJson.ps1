@@ -67,7 +67,7 @@ Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceG
 Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -SynapseWorkspaceName "$SynapseWorkspaceName" -Location "$Location" -Method "AzSynapse"
 
 .LINK
-Online version: https://github.com/SQLPlayer/azure.synapse.tools/
+Online version: https://github.com/Azure-Player/azure.synapse.tools/
 #>
 function Publish-SynapseFromJson {
     [CmdletBinding()]

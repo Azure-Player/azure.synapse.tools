@@ -54,10 +54,10 @@ The module is available on [PowerShell Gallery](https://www.powershellgallery.co
 
 # Release Notes
 
-New features, bug fixes and changes [can be found here](https://github.com/SQLPlayer/azure.synapse.tools/blob/master/changelog.md).
+New features, bug fixes and changes [can be found here](https://github.com/Azure-Player/azure.synapse.tools/blob/master/changelog.md).
 
 # Misc
 
 ## New feature requests
 Tell me your thoughts or describe your specific case or problem.  
-For any requests on new features please raise a new issue here: [New issue](https://github.com/SQLPlayer/azure.synapse.tools/issues)  
+For any requests on new features please raise a new issue here: [New issue](https://github.com/Azure-Player/azure.synapse.tools/issues)  

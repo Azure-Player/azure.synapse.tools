@@ -23,7 +23,7 @@ Get-SynapseDocDiagram -synapse $synapse -direction 'TD'
 Get-SynapseDocDiagram -synapse $synapse | Set-Content -Path 'synapse-diagram.md'
 
 .LINK
-Online version: https://github.com/SQLPlayer/azure.synapse.tools/
+Online version: https://github.com/Azure-Player/azure.synapse.tools/
 #>
 function Get-SynapseDocDiagram {
     [CmdletBinding()]
