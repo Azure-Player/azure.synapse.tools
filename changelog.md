@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.23.0] - 2024-03-18
+## [0.23.0] - 2024-03-25
 * Added: DeleteIfNotInSource. Deletes objects in target Synapse workspace that does not exist in the source. Note: Credential objects are not yet supported.
 
 ## [0.22.0] - 2023-07-29
