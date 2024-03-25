@@ -6,6 +6,7 @@ function Get-SimplifiedType {
 
     $simtype = $type
     if ($type -like 'PS*') { $simtype = $type.Substring(2) }
+    if ($simtype -like '*Resource') { $simtype = $simtype -replace 'Resource', '' }
     if ($simtype -like '*IntegrationRuntime') { $simtype = 'IntegrationRuntime' }
 
     #Write-Debug "Get-SimplifiedType($Type) = $simtype"
