@@ -191,16 +191,17 @@ function Publish-SynapseFromJson {
         Deploy-SynapseObject -obj $_
     }
 
-
-    
-
-
-
-
-
-
-
-
+    Write-Host "===================================================================================";
+    Write-Host "STEP: Deleting objects not in source ..."
+    if ($opt.DeleteNotInSource -eq $true) {
+        $synapseIns = Get-SynapseFromService -WorkspaceName "$SynapseWorkspaceName"
+        $synapseIns.AllObjects() | ForEach-Object {
+            Remove-SynapseObjectIfNotInSource -synapseSource $synapse -synapseTargetObj $_ -synapseInstance $synapseIns
+        }
+        Write-Host "Deleted $($synapse.DeletedObjectNames.Count) objects from Synapse service."
+    } else {
+        Write-Host "Operation skipped as publish option 'DeleteNotInSource' = false"
+    }
 
     Write-Host "===================================================================================";
     Write-Host "STEP: Starting all triggers..."

@@ -13,6 +13,7 @@ class SynapsePublishOption {
 }
 
 class Synapse {
+    [string] $Id = ""
     [string] $Name = ""
     [string] $ResourceGroupName = ""
     [string] $Region = ""
@@ -29,12 +30,13 @@ class Synapse {
     [System.Collections.ArrayList] $Notebooks = @{}
     [System.Collections.ArrayList] $SparkJobDefinitions = @{}
     [System.Collections.ArrayList] $SqlPool = @{}
+    [System.Collections.ArrayList] $DeletedObjectNames = @{}
     [string] $Location = ""
     [SynapsePublishOption] $PublishOptions
 
     [System.Collections.ArrayList] AllObjects()
     {
-        return $this.LinkedServices + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.SQLScripts + $this.KQLScripts+ $this.Notebooks + $this.SparkJobDefinitions + $this.IntegrationRuntimes + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
+        return $this.LinkedServices + $this.Notebooks + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.SQLScripts + $this.KQLScripts+ $this.Notebooks + $this.SparkJobDefinitions + $this.IntegrationRuntimes + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
     }
 
     [hashtable] GetObjectsByFullName([string]$pattern)
