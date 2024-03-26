@@ -140,9 +140,15 @@ function Publish-SynapseFromJson {
     if ($targetSynapse) {
         Write-Host "Synapse Workspace exists."
         if ($opt.IncrementalDeployment) {
-            $targetSynapse |Add-Member -MemberType NoteProperty -Name StorageAccountName -Value $StorageAccountName -Force
-            Write-Host "Loading Deployment State from Synapse..."
-            $ds.Deployed = Get-StateFromService -targetSynapse $targetSynapse
+            if ($StorageAccountName) {
+                $targetSynapse |Add-Member -MemberType NoteProperty -Name StorageAccountName -Value $StorageAccountName -Force
+                Write-Host "Loading Deployment State from Synapse..."
+                $ds.Deployed = Get-StateFromService -targetSynapse $targetSynapse
+            }
+            else {
+                Write-Host "StorageAccountName parameter is required for Incremental Deployment"
+                exit 1
+            }
         }
     } else {
         $msg = "Synapse Workspace instance does not exist."
