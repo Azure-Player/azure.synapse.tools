@@ -1,5 +1,5 @@
 class SynapseDeploymentState {
-    [datetime] $LastUpdate 
+    [datetime] $LastUpdate = [System.DateTime]::UtcNow
     [hashtable] $Deployed = @{}
     [string] $synapsetoolsVer = ''
     [string] $Algorithm = 'MD5'
@@ -33,7 +33,7 @@ class SynapseDeploymentState {
             $this.Deployed = Remove-ItemFromCollection -col $this.Deployed -item $_
             Write-Verbose "[DELETED] hash for $_"
         }
-        $this.LastUpdate = [System.DateTime]::UtcNow
+        $this.LastUpdate
         return $cnt;
     }
 
