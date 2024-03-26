@@ -81,6 +81,9 @@ function Publish-SynapseFromJson {
         
         [parameter(Mandatory = $true)] 
         [String] $SynapseWorkspaceName,
+
+        [parameter(Mandatory = $false)]
+        [String] $StorageAccountName,
         
         [parameter(Mandatory = $false)] 
         [String] $Stage = $null,
@@ -113,12 +116,14 @@ function Publish-SynapseFromJson {
     Write-Host "Synapse Workspace:  $SynapseWorkspaceName";
     Write-Host "Location:           $Location";
     Write-Host "Stage:              $Stage";
+    Write-Host "Storage Account:    $StorageAccountName";
     Write-Host "Options provided:   $($null -ne $Option)";
     Write-Host "Publishing method:  $Method";
     Write-Host "======================================================================================";
 
     $script:StartTime = Get-Date
     $script:PublishMethod = $Method
+    $script:ds = [SynapseDeploymentState]::new($verStr)
 
     if ($null -ne $Option) {
         Write-Host "Publish options are provided."
@@ -134,6 +139,11 @@ function Publish-SynapseFromJson {
      
     if ($targetSynapse) {
         Write-Host "Synapse Workspace exists."
+        if ($opt.IncrementalDeployment) {
+            $targetSynapse |Add-Member -MemberType NoteProperty -Name StorageAccountName -Value $StorageAccountName -Force
+            Write-Host "Loading Deployment State from Synapse..."
+            $ds.Deployed = Get-StateFromService -targetSynapse $targetSynapse
+        }
     } else {
         $msg = "Synapse Workspace instance does not exist."
         if ($opt.CreateNewInstance) {
@@ -158,11 +168,6 @@ function Publish-SynapseFromJson {
     $synapse.PublishOptions = $opt
     Write-Debug ($synapse | Format-List | Out-String)
 
-    # Apply Deployment Options if applicable
-    if ($null -ne $Option) {
-        ApplyExclusionOptions -synapse $synapse 
-    }
-
     Write-Host "===================================================================================";
     Write-Host "STEP: Replacing all properties environment-related..."
     if (![string]::IsNullOrEmpty($Stage)) {
@@ -170,6 +175,32 @@ function Publish-SynapseFromJson {
     } else {
         Write-Host "Stage parameter was not provided - action skipped."
     }
+
+    Write-Host "===================================================================================";
+    Write-Host "STEP: Determining the objects to be deployed..."
+
+    # Apply Deployment Options if applicable
+    if ($null -ne $Option) {
+        ApplyExclusionOptions -synapse $synapse
+    }
+    Write-Verbose "Incremental Deployment = $($opt.IncrementalDeployment)"
+    if ($opt.IncrementalDeployment) {
+        Write-Verbose "The following objects will not be deployed as they have no changes since last deployment:"
+        $unchanged_count = 0
+        $synapse.AllObjects() | ForEach-Object {
+            $fullName = $_.FullName()
+            $newHash = $_.GetHash()
+            $isUnchanged = $ds.Deployed.ContainsKey($fullName) -and $ds.Deployed[$fullName] -eq $newHash
+            Write-Host "- $fullName ( $newHash ) = Unchanged: $isUnchanged"
+            if ($isUnchanged) {
+                Write-Verbose "- $fullName"
+                $_.ToBeDeployed = $false
+                $unchanged_count++
+            }
+        }
+        Write-Host "Found $unchanged_count unchanged object(s)."
+    }
+    ToBeDeployedStat -synapse $synapse
 
     Write-Host "===================================================================================";
     Write-Host "STEP: Stopping triggers..."
@@ -201,6 +232,23 @@ function Publish-SynapseFromJson {
         Write-Host "Deleted $($synapse.DeletedObjectNames.Count) objects from Synapse service."
     } else {
         Write-Host "Operation skipped as publish option 'DeleteNotInSource' = false"
+    }
+
+    Write-Host "===================================================================================";
+    Write-Host "STEP: Updating (incremental) deployment state..."
+    if ($opt.IncrementalDeployment) {
+        Write-Debug "Deployment State -> SetStateFromSynapse..."
+        $ds.SetStateFromSynapse($synapse)
+        $dsjson = ConvertTo-Json $ds -Depth 5
+        Write-Verbose "--- Deployment State: ---`r`n $dsjson"
+    
+        Write-Verbose "Redeploying Synapse Deployment State..."
+        Set-StateFromService -targetSynapse $targetSynapse -content $dsjson
+        
+    }
+    else {
+        Write-Host "Incremental Deployment State will not be saved as publish option 'IncrementalDeployment' = false"
+        Write-Host "Try this new feature to speed up the deployment process. Check out more in documentation."
     }
 
     Write-Host "===================================================================================";

@@ -83,6 +83,12 @@ class SynapseObject {
         return $ofn
     }
 
+    [String] GetHash()
+    {
+        $hash = Get-FileHash -Path $this.FileName -Algorithm 'MD5'
+        return $hash.Hash
+    }
+
     static $AllowedTypes = @('integrationRuntime', 'pipeline', 'dataset', 'dataflow', 'linkedService', 'trigger', 'kqlscript', 'sqlscript', 'notebook', 'managedVirtualNetwork', 'managedPrivateEndpoint', 'sqlpool', 'BigDataPool', 'SparkJobDefinition')
 
     static AssertType ([string] $Type)
