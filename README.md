@@ -47,10 +47,16 @@ Get-Module -Name azure.synapse.tools
 
 The module is available on [PowerShell Gallery](https://www.powershellgallery.com/packages/azure.synapse.tools).
 
+## Publish Options
+* DeleteNotInSource: Deletes objects in destination that does not exist in source.
+* IncrementalDeployment: Deployment state file to only deploy changed objects in the source.
 
+### Incremental Deployment
 
+The Synapse service does not have global parameter capability as in Azure Data Factory (ADF). In order to maintain a deployment state of changed objects, a storage account and json file will hold the deployment state. The file will be in the naming convention: `<synapse-workspace-name>_deployment_state.json`. If `IncrementalDeployment` is used, please find the prerequisites below.
 
-
+1. Authenticated user with `Storage Blob Data Contributor` rbac role on the destination storage account.
+2. `azure-synapse-tools` container is required prior to deploying a Synapse workspace.
 
 # Release Notes
 

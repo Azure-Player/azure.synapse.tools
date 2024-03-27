@@ -10,6 +10,7 @@ class SynapsePublishOption {
     [Boolean] $IgnoreLackOfReferencedObject = $false
     [Boolean] $DoNotStopStartExcludedTriggers = $false
     [Boolean] $DoNotDeleteExcludedObjects = $true
+    [Boolean] $IncrementalDeployment = $false
 }
 
 class Synapse {
