@@ -10,11 +10,11 @@ InModuleScope azure.synapse.tools {
     $testHelperPath = $PSScriptRoot | Join-Path -ChildPath 'TestHelper'
     Import-Module -Name $testHelperPath -Force
     Describe 'Set-StateFromService' {
-        BeforeAll {
-            Mock -CommandName Get-AzStorageContainer -MockWith {}
-        }
         Context 'Run test when throws an error' {
             BeforeAll {
+                BeforeAll {
+                    Mock -CommandName Get-AzStorageContainer -MockWith {}
+                }
                 $targetSynapse = [pscustomobject]@{
                     name = 'synapse1'
                     StorageAccountName = 'storage1'
