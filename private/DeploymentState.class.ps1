@@ -59,7 +59,7 @@ function Get-StateFromService {
             }
         }
         catch {
-            
+            throw $_.Exception
         }
 
         $d = @{}
@@ -83,7 +83,8 @@ function Set-StateFromService {
         $StorageContext = New-AzStorageContext -StorageAccountName $targetSynapse.StorageAccountName -ErrorAction Stop
         $StorageContainer = Get-AzStorageContainer -Name azure-synapse-tools -Context $StorageContext -ErrorAction Stop
         $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
-        $res = $DeploymentStateFile.UploadText($content)
+        $DeploymentStateFile.UploadText($content)
+        Write-Output "Successfully updated $($targetSynapse.name)_deployment_state.json"
     }
     catch {
         throw $_.Exception
