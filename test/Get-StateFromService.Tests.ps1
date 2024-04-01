@@ -12,13 +12,11 @@ InModuleScope azure.synapse.tools {
     Describe 'Get-StateFromService' {
         Context 'Run test when throws an error' {
             BeforeAll {
-                BeforeAll {
-                    Mock -CommandName Get-AzStorageContainer -MockWith {}
-                }
-                $targetSynapse = [pscustomobject]@{
-                    name = 'synapse1'
-                    StorageAccountName = 'storage1'
-                }
+                Mock -CommandName Get-AzStorageContainer -MockWith {}
+            }
+            $targetSynapse = [pscustomobject]@{
+                name = 'synapse1'
+                StorageAccountName = 'storage1'
             }
             It 'Should throw error if storage account does not exist' {
                 {Get-StateFromService -targetSynapse $targetSynapse} |Should -Throw
