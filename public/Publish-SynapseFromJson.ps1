@@ -63,6 +63,13 @@ $opt.StopStartTriggers = $false
 Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -SynapseWorkspaceName "$SynapseWorkspaceName" -Location "$Location" -Stage "UAT" -Option $opt
 
 .EXAMPLE
+# Publish incremental deployment of Synapse Workspace
+$opt = New-SynapsePublishOption
+$opt.IncrementalDeployment = $true
+$opt.StorageAccountName = 'storageaccount1'
+Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -SynapseWorkspaceName "$SynapseWorkspaceName" -Location "$Location" -Stage "UAT" -Option $opt
+
+.EXAMPLE
 # Publish entire Synapse Workspace via Az.Synapse module instead of Az.Resources
 Publish-SynapseFromJson -RootFolder "$RootFolder" -ResourceGroupName "$ResourceGroupName" -SynapseWorkspaceName "$SynapseWorkspaceName" -Location "$Location" -Method "AzSynapse"
 
@@ -81,9 +88,6 @@ function Publish-SynapseFromJson {
         
         [parameter(Mandatory = $true)] 
         [String] $SynapseWorkspaceName,
-
-        [parameter(Mandatory = $false)]
-        [String] $StorageAccountName,
         
         [parameter(Mandatory = $false)] 
         [String] $Stage = $null,
@@ -116,7 +120,6 @@ function Publish-SynapseFromJson {
     Write-Host "Synapse Workspace:  $SynapseWorkspaceName";
     Write-Host "Location:           $Location";
     Write-Host "Stage:              $Stage";
-    Write-Host "Storage Account:    $StorageAccountName";
     Write-Host "Options provided:   $($null -ne $Option)";
     Write-Host "Publishing method:  $Method";
     Write-Host "======================================================================================";
@@ -140,8 +143,8 @@ function Publish-SynapseFromJson {
     if ($targetSynapse) {
         Write-Host "Synapse Workspace exists."
         if ($opt.IncrementalDeployment) {
-            if ($StorageAccountName) {
-                $targetSynapse |Add-Member -MemberType NoteProperty -Name StorageAccountName -Value $StorageAccountName -Force
+            if ($opt.StorageAccountName) {
+                $targetSynapse |Add-Member -MemberType NoteProperty -Name StorageAccountName -Value $opt.StorageAccountName -Force
                 Write-Host "Loading Deployment State from Synapse..."
                 $ds.Deployed = Get-StateFromService -targetSynapse $targetSynapse
             }
