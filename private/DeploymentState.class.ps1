@@ -90,16 +90,3 @@ function Set-StateFromService {
         throw $_.Exception
     }
 }
-
-
-
-class SynapseGlobalParam {
-    $type = "Object"
-    $value = $null
-
-    SynapseGlobalParam ($value) 
-    {
-        $this.value = $value
-    }
-
-}
