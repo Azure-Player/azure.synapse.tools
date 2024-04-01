@@ -142,17 +142,6 @@ function Publish-SynapseFromJson {
      
     if ($targetSynapse) {
         Write-Host "Synapse Workspace exists."
-        if ($opt.IncrementalDeployment) {
-            if ($opt.StorageAccountName) {
-                $targetSynapse |Add-Member -MemberType NoteProperty -Name StorageAccountName -Value $opt.StorageAccountName -Force
-                Write-Host "Loading Deployment State from Synapse..."
-                $ds.Deployed = Get-StateFromService -targetSynapse $targetSynapse
-            }
-            else {
-                Write-Host "StorageAccountName parameter is required for Incremental Deployment"
-                exit 1
-            }
-        }
     } else {
         $msg = "Synapse Workspace instance does not exist."
         if ($opt.CreateNewInstance) {
@@ -194,6 +183,15 @@ function Publish-SynapseFromJson {
     }
     Write-Verbose "Incremental Deployment = $($opt.IncrementalDeployment)"
     if ($opt.IncrementalDeployment) {
+        if ($opt.StorageAccountName) {
+            $targetSynapse |Add-Member -MemberType NoteProperty -Name StorageAccountName -Value $opt.StorageAccountName -Force
+            Write-Host "Loading Deployment State from Synapse..."
+            $ds.Deployed = Get-StateFromService -targetSynapse $targetSynapse
+        }
+        else {
+            Write-Host "StorageAccountName parameter is required for Incremental Deployment"
+            exit 1
+        }
         Write-Verbose "The following objects will not be deployed as they have no changes since last deployment:"
         $unchanged_count = 0
         $synapse.AllObjects() | ForEach-Object {
