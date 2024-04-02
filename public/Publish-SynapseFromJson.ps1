@@ -184,9 +184,9 @@ function Publish-SynapseFromJson {
     Write-Verbose "Incremental Deployment = $($opt.IncrementalDeployment)"
     if ($opt.IncrementalDeployment) {
         if ($opt.StorageAccountName) {
-            $targetSynapse |Add-Member -MemberType NoteProperty -Name StorageAccountName -Value $opt.StorageAccountName -Force
+            $ds.StorageAccountName = $opt.StorageAccountName
             Write-Host "Loading Deployment State from Synapse..."
-            $ds.Deployed = Get-StateFromService -targetSynapse $targetSynapse
+            $ds.Deployed = Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName $opt.StorageAccountName
         }
         else {
             Write-Host "StorageAccountName parameter is required for Incremental Deployment"
@@ -217,17 +217,17 @@ function Publish-SynapseFromJson {
         Write-Host "Operation skipped as publish option 'StopStartTriggers' = false"
     }
 
-    Write-Host "===================================================================================";
-    Write-Host "STEP: Deployment of all Synapse objects..."
-    if ($opt.DeployGlobalParams -eq $false) {
-        Write-Host "Deployment of Global Parameters will be skipped as publish option 'DeployGlobalParams' = false"
-        if ($synapse.Factories.Count -gt 0) {
-            $synapse.Factories[0].ToBeDeployed = $false
-        }
-    }
-    $synapse.AllObjects() | ForEach-Object {
-        Deploy-SynapseObject -obj $_
-    }
+    # Write-Host "===================================================================================";
+    # Write-Host "STEP: Deployment of all Synapse objects..."
+    # if ($opt.DeployGlobalParams -eq $false) {
+    #     Write-Host "Deployment of Global Parameters will be skipped as publish option 'DeployGlobalParams' = false"
+    #     if ($synapse.Factories.Count -gt 0) {
+    #         $synapse.Factories[0].ToBeDeployed = $false
+    #     }
+    # }
+    # $synapse.AllObjects() | ForEach-Object {
+    #     Deploy-SynapseObject -obj $_
+    # }
 
     Write-Host "===================================================================================";
     Write-Host "STEP: Deleting objects not in source ..."
@@ -250,7 +250,7 @@ function Publish-SynapseFromJson {
         Write-Verbose "--- Deployment State: ---`r`n $dsjson"
     
         Write-Verbose "Redeploying Synapse Deployment State..."
-        Set-StateFromService -targetSynapse $targetSynapse -content $dsjson
+        Set-StateFromService -targetSynapse $targetSynapse -content $dsjson -StorageAccountName $opt.StorageAccountName
         
     }
     else {
