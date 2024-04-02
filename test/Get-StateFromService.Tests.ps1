@@ -16,20 +16,18 @@ InModuleScope azure.synapse.tools {
             }
             $targetSynapse = [pscustomobject]@{
                 name = 'synapse1'
-                StorageAccountName = 'storage1'
             }
             It 'Should throw error if storage account does not exist' {
-                {Get-StateFromService -targetSynapse $targetSynapse} |Should -Throw
+                {Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName storage1} |Should -Throw
             }
             It 'Should throw error when container does not exist' {
-                {Get-StateFromService -targetSynapse $targetSynapse} |Should -Throw
+                {Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName storage1} |Should -Throw
             }
         }
         Context 'Run test when return deployment state' {
             BeforeAll {
                 $targetSynapse = [pscustomobject]@{
                     name = 'synapse1'
-                    StorageAccountName = 'storage1'
                 }
                 $CloudBlockBlobType = New-MockObject -Type Microsoft.Azure.Storage.Blob.CloudBlockBlob -Methods @{
                     DownloadText = {
@@ -50,10 +48,10 @@ InModuleScope azure.synapse.tools {
                 {Get-Command -Name Get-StateFromService -ErrorAction Stop} |Should -Not -Throw
             }
             It 'Should return hashtable type' {
-                Get-StateFromService -targetSynapse $targetSynapse |Should -BeOfType [hashtable]
+                Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName storage1 |Should -BeOfType [hashtable]
             }
             It 'Should return ABCDE' {
-                $State = Get-StateFromService -targetSynapse $targetSynapse
+                $State = Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName storage1
                 $State.Values |Should -BeExactly 'ABCDE'
             }
         }
