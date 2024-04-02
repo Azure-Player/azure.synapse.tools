@@ -217,17 +217,17 @@ function Publish-SynapseFromJson {
         Write-Host "Operation skipped as publish option 'StopStartTriggers' = false"
     }
 
-    # Write-Host "===================================================================================";
-    # Write-Host "STEP: Deployment of all Synapse objects..."
-    # if ($opt.DeployGlobalParams -eq $false) {
-    #     Write-Host "Deployment of Global Parameters will be skipped as publish option 'DeployGlobalParams' = false"
-    #     if ($synapse.Factories.Count -gt 0) {
-    #         $synapse.Factories[0].ToBeDeployed = $false
-    #     }
-    # }
-    # $synapse.AllObjects() | ForEach-Object {
-    #     Deploy-SynapseObject -obj $_
-    # }
+    Write-Host "===================================================================================";
+    Write-Host "STEP: Deployment of all Synapse objects..."
+    if ($opt.DeployGlobalParams -eq $false) {
+        Write-Host "Deployment of Global Parameters will be skipped as publish option 'DeployGlobalParams' = false"
+        if ($synapse.Factories.Count -gt 0) {
+            $synapse.Factories[0].ToBeDeployed = $false
+        }
+    }
+    $synapse.AllObjects() | ForEach-Object {
+        Deploy-SynapseObject -obj $_
+    }
 
     Write-Host "===================================================================================";
     Write-Host "STEP: Deleting objects not in source ..."
