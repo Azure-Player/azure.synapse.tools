@@ -3,6 +3,7 @@ class SynapseDeploymentState {
     [hashtable] $Deployed = @{}
     [string] $synapsetoolsVer = ''
     [string] $Algorithm = 'MD5'
+    [string] $StorageAccountName = ''
 
     SynapseDeploymentState ([string] $ver)
     {
@@ -34,6 +35,7 @@ class SynapseDeploymentState {
             Write-Verbose "[DELETED] hash for $_"
         }
         $this.LastUpdate
+        $this.StorageAccountName
         return $cnt;
     }
 
@@ -47,10 +49,13 @@ class SynapseDeploymentState {
 
 function Get-StateFromService {
     [CmdletBinding()]
-    param ($targetSynapse)
+    param (
+        $targetSynapse,
+        [string] $StorageAccountName
+    )
 
         try {
-            $StorageContext = New-AzStorageContext -StorageAccountName $targetSynapse.StorageAccountName -ErrorAction Stop
+            $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -ErrorAction Stop
             $StorageContainer = Get-AzStorageContainer -Name azure-synapse-tools -Context $StorageContext -ErrorAction Stop
             $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
             $res = $DeploymentStateFile.DownloadText()
@@ -77,10 +82,14 @@ function Get-StateFromService {
 
 function Set-StateFromService {
     [CmdletBinding()]
-    param ($targetSynapse, $content)
+    param (
+        $targetSynapse,
+        $content,
+        [string] $StorageAccountName
+    )
 
     try {
-        $StorageContext = New-AzStorageContext -StorageAccountName $targetSynapse.StorageAccountName -ErrorAction Stop
+        $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -ErrorAction Stop
         $StorageContainer = Get-AzStorageContainer -Name azure-synapse-tools -Context $StorageContext -ErrorAction Stop
         $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
         $DeploymentStateFile.UploadText($content)
