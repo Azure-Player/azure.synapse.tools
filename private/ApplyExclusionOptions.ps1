@@ -34,7 +34,6 @@ function ApplyExclusionOptions {
         $option.Includes.Keys | ForEach-Object {
             $key = $_
             $synapse.AllObjects() | ForEach-Object {
-                Write-Verbose "--- $($_.name)"
                 [SynapseObject] $o = $_
                 $deployable = $o.IsNameMatch($key)
                 if ($deployable) { $o.ToBeDeployed = $true }
@@ -43,14 +42,19 @@ function ApplyExclusionOptions {
         }
     }
 
-    $ToBeDeployedList = ($synapse.AllObjects() | Where-Object { $_.ToBeDeployed -eq $true } | ToArray)
+    Write-Debug "END: ApplyExclusionOptions()"
+}
+
+function ToBeDeployedStat {
+    param(
+        [Parameter(Mandatory=$True)] [Synapse] $synapse
+    )
+
+    $ToBeDeployedList = ($synapse.AllObjects() | Where-Object { $_.ToBeDeployed -eq $true } |Select-Object -Unique | ToArray)
     $i = $ToBeDeployedList.Count
     Write-Host "# Number of objects marked as to be deployed: $i/$($synapse.AllObjects().Count)"
     $ToBeDeployedList | ForEach-Object {
         Write-Host "- $($_.FullName($true))"
     }
 
-
-    Write-Debug "END: ApplyExclusionOptions()"
 }
-
