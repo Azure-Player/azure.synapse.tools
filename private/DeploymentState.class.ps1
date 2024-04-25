@@ -56,11 +56,11 @@ function Get-StateFromService {
 
         try {
             $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -ErrorAction Stop
-            $StorageContainer = Get-AzStorageContainer -Name azure-synapse-tools -Context $StorageContext -ErrorAction Stop
+            $StorageContainer = Get-AzStorageContainer -Name 'azure-synapse-tools' -Context $StorageContext -ErrorAction Stop
             $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
             $res = $DeploymentStateFile.DownloadText()
             if ($res) {
-                $res = $res |ConvertFrom-Json
+                $res = $res | ConvertFrom-Json
             }
         }
         catch {
@@ -90,7 +90,7 @@ function Set-StateFromService {
 
     try {
         $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -ErrorAction Stop
-        $StorageContainer = Get-AzStorageContainer -Name azure-synapse-tools -Context $StorageContext -ErrorAction Stop
+        $StorageContainer = Get-AzStorageContainer -Name 'azure-synapse-tools' -Context $StorageContext -ErrorAction Stop
         $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
         $DeploymentStateFile.UploadText($content)
         Write-Output "Successfully updated $($targetSynapse.name)_deployment_state.json"

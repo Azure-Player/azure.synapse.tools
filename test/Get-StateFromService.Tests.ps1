@@ -9,6 +9,7 @@ BeforeDiscovery {
 InModuleScope azure.synapse.tools {
     $testHelperPath = $PSScriptRoot | Join-Path -ChildPath 'TestHelper'
     Import-Module -Name $testHelperPath -Force
+
     Describe 'Get-StateFromService' {
         Context 'Run test when throws an error' {
             BeforeAll {
@@ -45,13 +46,13 @@ InModuleScope azure.synapse.tools {
                 }
             }
             It 'Should exist' {
-                {Get-Command -Name Get-StateFromService -ErrorAction Stop} |Should -Not -Throw
+                {Get-Command -Name Get-StateFromService -ErrorAction Stop} | Should -Not -Throw
             }
             It 'Should return hashtable type' {
-                Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName storage1 |Should -BeOfType [hashtable]
+                Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1' | Should -BeOfType [hashtable]
             }
             It 'Should return ABCDE' {
-                $State = Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName storage1
+                $State = Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1'
                 $State.Values |Should -BeExactly 'ABCDE'
             }
         }
