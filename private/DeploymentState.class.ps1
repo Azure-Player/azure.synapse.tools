@@ -67,6 +67,7 @@ function Get-StateFromService {
             Catch {
                 Try {
                     $DeploymentStateFile.UploadText("")
+                    Write-Host "Created placeholder $($targetSynapse.name)_deployment_state.json file"
                 }
                 Catch {
                     throw $_
