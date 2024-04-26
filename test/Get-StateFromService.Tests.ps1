@@ -31,9 +31,7 @@ InModuleScope azure.synapse.tools {
                     name = 'synapse1'
                 }
                 $CloudBlockBlobType = New-MockObject -Type Microsoft.Azure.Storage.Blob.CloudBlockBlob -Methods @{
-                    UploadText = {
-                        ''
-                    }
+                    DownloadText = {}
                 }  
                 $CloudBlobContainerType = New-MockObject -Type Microsoft.Azure.Storage.Blob.CloudBlobContainer -Methods @{GetBlockBlobReference = {$CloudBlockBlobType}} 
                 $Storage = New-MockObject -Type 'Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel.AzureStorageBase' -Properties @{CloudBlobContainer = $CloudBlobContainerType}
@@ -42,7 +40,7 @@ InModuleScope azure.synapse.tools {
                 }
             }
             It 'Should create empty blob' {
-                Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1' |Should -BeLike @{UploadText = "Created placeholder synapse1_deployment_state.json file"}
+                Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1' |Should -BeLike @{UploadText = 'Created placeholder synapse1_deployment_state.json file*'}
                 {Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1'} |Should -Not -Throw
             }
         }
