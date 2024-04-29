@@ -40,8 +40,9 @@ InModuleScope azure.synapse.tools {
                 }
             }
             It 'Should create empty blob' {
+                Mock -CommandName Write-Host -MockWith {}
                 $Result = Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1'
-                $Result |Should -BeExactly 'Created placeholder synapse1_deployment_state.json file'
+                Assert-MockCalled -CommandName Write-Host -Times 1 -Exactly
                 {Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1'} |Should -Not -Throw
             }
         }
