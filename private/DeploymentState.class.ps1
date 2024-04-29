@@ -61,34 +61,38 @@ function Get-StateFromService {
             Try {
                 $res = $DeploymentStateFile.DownloadText()
                 if ($res) {
-                    $res = $res |ConvertFrom-Json
+                    Try {
+                        $res = $res |ConvertFrom-Json -ErrorAction Stop
+                    }
+                    Catch {
+                        throw $_.Exception
+                    }
                 }
+                $d = @{}
+
+                try {
+                    $InputObject = $res.Deployed
+                    $d = Convert-PSObjectToHashtable $InputObject
+                }
+                catch {
+                    Write-Verbose $_.Exception
+                }
+
+                return $d
             }
             Catch {
                 Try {
-                    $DeploymentStateFile.UploadText("")
-                    Write-Host "Created placeholder $($targetSynapse.name)_deployment_state.json file"
+                    $DeploymentStateFile.UploadText("{}")
+                    Write-Output "Created placeholder $($targetSynapse.name)_deployment_state.json file"
                 }
                 Catch {
-                    throw $_
+                    throw $_.Exception
                 }
             }
         }
         catch {
             throw $_.Exception
         }
-
-        $d = @{}
-
-        try {
-            $InputObject = $res.Deployed
-            $d = Convert-PSObjectToHashtable $InputObject
-        }
-        catch {
-            Write-Verbose $_.Exception
-        }
-
-        return $d
 }
 
 function Set-StateFromService {
