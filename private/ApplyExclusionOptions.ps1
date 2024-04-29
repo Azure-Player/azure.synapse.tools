@@ -50,7 +50,7 @@ function ToBeDeployedStat {
         [Parameter(Mandatory=$True)] [Synapse] $synapse
     )
 
-    $ToBeDeployedList = ($synapse.AllObjects() | Where-Object { $_.ToBeDeployed -eq $true } |Select-Object -Unique | ToArray)
+    $ToBeDeployedList = ($synapse.AllObjects() | Where-Object { $_.ToBeDeployed -eq $true } | ToArray)
     $i = $ToBeDeployedList.Count
     Write-Host "# Number of objects marked as to be deployed: $i/$($synapse.AllObjects().Count)"
     $ToBeDeployedList | ForEach-Object {
