@@ -38,7 +38,7 @@ class Synapse {
 
     [System.Collections.ArrayList] AllObjects()
     {
-        return $this.LinkedServices + $this.Notebooks + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.SQLScripts + $this.KQLScripts+ $this.Notebooks + $this.SparkJobDefinitions + $this.IntegrationRuntimes + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
+        return $this.LinkedServices + $this.Notebooks + $this.Pipelines + $this.DataSets + $this.DataFlows + $this.Triggers + $this.SQLScripts + $this.KQLScripts + $this.SparkJobDefinitions + $this.IntegrationRuntimes + $this.ManagedVirtualNetwork + $this.ManagedPrivateEndpoints
     }
 
     [hashtable] GetObjectsByFullName([string]$pattern)

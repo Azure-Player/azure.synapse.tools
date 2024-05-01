@@ -25,6 +25,27 @@ InModuleScope azure.synapse.tools {
                 {Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName storage1} |Should -Throw
             }
         }
+        Context 'Run test when blob does not exist' {
+            BeforeAll {
+                $targetSynapse = [pscustomobject]@{
+                    name = 'synapse1'
+                }
+                $CloudBlockBlobType = New-MockObject -Type Microsoft.Azure.Storage.Blob.CloudBlockBlob -Methods @{
+                    UploadText = {}
+                }  
+                $CloudBlobContainerType = New-MockObject -Type Microsoft.Azure.Storage.Blob.CloudBlobContainer -Methods @{GetBlockBlobReference = {$CloudBlockBlobType}} 
+                $Storage = New-MockObject -Type 'Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel.AzureStorageBase' -Properties @{CloudBlobContainer = $CloudBlobContainerType}
+                Mock -CommandName Get-AzStorageContainer -MockWith {
+                    $Storage
+                }
+            }
+            It 'Should create empty blob' {
+                Mock -CommandName Write-Host -MockWith {}
+                $Result = Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1'
+                Assert-MockCalled -CommandName Write-Host -Times 1 -Exactly
+                {Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1'} |Should -Not -Throw
+            }
+        }
         Context 'Run test when return deployment state' {
             BeforeAll {
                 $targetSynapse = [pscustomobject]@{

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.25.0] - 2024-04-26
+* Fixed: Bug when blob does not exist in the container. An empty json file will now be created. Related to [#34](https://github.com/Azure-Player/azure.synapse.tools/issues/34)
+* Fixed: Duplicate notebook values when loading synapse objects.
+
 ## [0.24.0] - 2024-03-26
 * Incremental Deployment #30. Creates and updates a deployment state file in a storage account. See [readme](README.md#incremental-deployment) for details.
 
