@@ -56,7 +56,7 @@ function Get-StateFromService {
 
         try {
             $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -ErrorAction Stop
-            $StorageContainer = Get-AzStorageContainer -Name azure-synapse-tools -Context $StorageContext -ErrorAction Stop
+            $StorageContainer = Get-AzStorageContainer -Name 'azure-synapse-tools' -Context $StorageContext -ErrorAction Stop
             $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
             Try {
                 $res = $DeploymentStateFile.DownloadText()
