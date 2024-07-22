@@ -31,6 +31,7 @@ InModuleScope azure.synapse.tools {
                     name = 'synapse1'
                 }
                 $CloudBlockBlobType = New-MockObject -Type Microsoft.Azure.Storage.Blob.CloudBlockBlob -Methods @{
+                    Exists = {}
                     UploadText = {}
                 }  
                 $CloudBlobContainerType = New-MockObject -Type Microsoft.Azure.Storage.Blob.CloudBlobContainer -Methods @{GetBlockBlobReference = {$CloudBlockBlobType}} 
@@ -52,6 +53,8 @@ InModuleScope azure.synapse.tools {
                     name = 'synapse1'
                 }
                 $CloudBlockBlobType = New-MockObject -Type Microsoft.Azure.Storage.Blob.CloudBlockBlob -Methods @{
+                    Exists = {$true}
+                    UploadText = {}
                     DownloadText = {
                         '{
                             "Deployed": {
