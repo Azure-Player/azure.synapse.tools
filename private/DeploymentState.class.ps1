@@ -54,45 +54,30 @@ function Get-StateFromService {
         [string] $StorageAccountName
     )
 
-    Try {
+    try {
         $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -ErrorAction Stop
         $StorageContainer = Get-AzStorageContainer -Name 'azure-synapse-tools' -Context $StorageContext -ErrorAction Stop
         $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
-    }
-    Catch {
-        throw $_.Exception
-    }
-    $exists = $DeploymentStateFile.Exists()
-    if ($exists) {
-        Try {
-            $content = $DeploymentStateFile.DownloadText()
-            $res = $content |ConvertFrom-Json -ErrorAction Stop
+        $Exists = $DeploymentStateFile.Exists()
+        if ($Exists) {
+            $Content = $DeploymentStateFile.DownloadText()
+            $res = $Content |ConvertFrom-Json -ErrorAction Stop
+
+            $d = @{}
+
+            $InputObject = $res.Deployed
+            $d = Convert-PSObjectToHashtable $InputObject
+
+            return $d
         }
-        Catch {
-            throw $_.Exception
-        }
-    }
-    else {
-        Try {
+        else {
             $DeploymentStateFile.UploadText('{"Deployed": {}}')
             Write-Host "Created placeholder $($targetSynapse.name)_deployment_state.json file"
         }
-        Catch {
-            throw $_.Exception
-        }
-    }
-
-    $d = @{}
-
-    try {
-        $InputObject = $res.Deployed
-        $d = Convert-PSObjectToHashtable $InputObject
     }
     catch {
-        Write-Verbose $_.Exception
+        throw $_.Exception
     }
-
-    return $d
 }
 
 function Set-StateFromService {
