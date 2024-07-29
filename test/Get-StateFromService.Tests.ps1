@@ -33,6 +33,9 @@ InModuleScope azure.synapse.tools {
                 $CloudBlockBlobType = New-MockObject -Type Microsoft.Azure.Storage.Blob.CloudBlockBlob -Methods @{
                     Exists = {}
                     UploadText = {}
+                    DownloadText = {
+                        '{"Deployed":{}}'
+                    }
                 }  
                 $CloudBlobContainerType = New-MockObject -Type Microsoft.Azure.Storage.Blob.CloudBlobContainer -Methods @{GetBlockBlobReference = {$CloudBlockBlobType}} 
                 $Storage = New-MockObject -Type 'Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel.AzureStorageBase' -Properties @{CloudBlobContainer = $CloudBlobContainerType}
@@ -41,10 +44,10 @@ InModuleScope azure.synapse.tools {
                 }
             }
             It 'Should create empty blob' {
-                Mock -CommandName Write-Host -MockWith {}
+                Mock -CommandName Write-Host -MockWith {'Created placeholder synapse1_deployment_state.json file'}
                 $Result = Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1'
-                Assert-MockCalled -CommandName Write-Host -Times 1 -Exactly
-                {Get-StateFromService -targetSynapse $targetSynapse -StorageAccountName 'storage1'} |Should -Not -Throw
+                Assert-MockCalled -CommandName Write-Host -Exactly -Times 1
+                {$Result} |Should -Not -Throw
             }
         }
         Context 'Run test when return deployment state' {
