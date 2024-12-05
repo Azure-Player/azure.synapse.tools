@@ -54,29 +54,24 @@ function Get-StateFromService {
         [string] $StorageAccountName
     )
 
-    try {
-        $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -ErrorAction Stop
-        $StorageContainer = Get-AzStorageContainer -Name 'azure-synapse-tools' -Context $StorageContext -ErrorAction Stop
-        $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
-        $Exists = $DeploymentStateFile.Exists()
-        if ($Exists) {
-            $Content = $DeploymentStateFile.DownloadText()
-            $res = $Content |ConvertFrom-Json -ErrorAction Stop
+    $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -ErrorAction Stop
+    $StorageContainer = Get-AzStorageContainer -Name 'azure-synapse-tools' -Context $StorageContext -ErrorAction Stop
+    $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
+    $Exists = $DeploymentStateFile.Exists()
+    if ($Exists) {
+        $Content = $DeploymentStateFile.DownloadText()
+        $res = $Content |ConvertFrom-Json -ErrorAction Stop
 
-            $d = @{}
+        $d = @{}
 
-            $InputObject = $res.Deployed
-            $d = Convert-PSObjectToHashtable $InputObject
+        $InputObject = $res.Deployed
+        $d = Convert-PSObjectToHashtable $InputObject
 
-            return $d
-        }
-        else {
-            $DeploymentStateFile.UploadText('{"Deployed": {}}')
-            Write-Host "Created placeholder $($targetSynapse.name)_deployment_state.json file"
-        }
+        return $d
     }
-    catch {
-        throw $_.Exception
+    else {
+        $DeploymentStateFile.UploadText('{"Deployed": {}}')
+        Write-Host "Created placeholder $($targetSynapse.name)_deployment_state.json file"
     }
 }
 
@@ -88,14 +83,9 @@ function Set-StateFromService {
         [string] $StorageAccountName
     )
 
-    try {
-        $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -ErrorAction Stop
-        $StorageContainer = Get-AzStorageContainer -Name 'azure-synapse-tools' -Context $StorageContext -ErrorAction Stop
-        $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
-        $DeploymentStateFile.UploadText($content)
-        Write-Output "Successfully updated $($targetSynapse.name)_deployment_state.json"
-    }
-    catch {
-        throw $_.Exception
-    }
+    $StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -ErrorAction Stop
+    $StorageContainer = Get-AzStorageContainer -Name 'azure-synapse-tools' -Context $StorageContext -ErrorAction Stop
+    $DeploymentStateFile = $StorageContainer.CloudBlobContainer.GetBlockBlobReference("$($targetSynapse.name)_deployment_state.json")
+    $DeploymentStateFile.UploadText($content)
+    Write-Output "Successfully updated $($targetSynapse.name)_deployment_state.json"
 }
