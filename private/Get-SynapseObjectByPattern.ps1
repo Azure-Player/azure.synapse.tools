@@ -47,10 +47,6 @@ function Get-SynapseObjectByPattern {
         {
             $r = $synapse.ManagedPrivateEndpoints | Where-Object { $_.Name -like $name }
         }
-        'managedVirtualNetwork\default\managedPrivateEndpoint'
-        {
-            $r = $synapse.ManagedPrivateEndpoints | Where-Object { $_.Name -like $name }
-        }
         default
         {
             Write-Error "ASWT0015: Type [$type] is not supported."
