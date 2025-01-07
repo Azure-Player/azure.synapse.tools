@@ -47,6 +47,10 @@ function Get-SynapseObjectByName {
         {
             $r = $synapse.ManagedVirtualNetwork | Where-Object { $_.Name -eq $name } | Select-Object -First 1
         }
+        'managedVirtualNetwork\default\managedPrivateEndpoint'
+        {
+            $r = $synapse.ManagedPrivateEndpoints | Where-Object { $_.Name -eq $name }
+        }
         'SqlPool'
         {
             $r = $synapse.SqlPool | Where-Object { $_.Name -eq $name } | Select-Object -First 1
