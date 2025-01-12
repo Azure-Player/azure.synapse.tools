@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.25.0] - 2025-01-07
+## [0.25.0] - 2025-01-12
 * Fixed: bug where updating values on Managed Private Endpoints failed while using JSON config file.
 
 ## [0.24.0] - 2024-03-26
