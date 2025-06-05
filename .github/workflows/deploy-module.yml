@@ -23,8 +23,9 @@ jobs:
       - name: Install required modules
         shell: pwsh
         run: |
-          Install-Module -Name Pester -Force -Scope CurrentUser
+          Install-Module -Name Pester        -Force -Scope CurrentUser
           Install-Module -Name PowerShellGet -Force -Scope CurrentUser
+          Install-Module -Name Az.Synapse    -Force -Scope CurrentUser
 
       - name: Run Pester tests
         shell: pwsh
