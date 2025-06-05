@@ -27,6 +27,19 @@ jobs:
           Install-Module -Name Az.Synapse    -Force -Scope CurrentUser
           Install-Module -Name Az.Storage    -Force -Scope CurrentUser
 
+      - name: Azure Login (Service Principal)
+        shell: pwsh
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        run: |
+          Connect-AzAccount `
+            -ServicePrincipal `
+            -Tenant $env:AZURE_TENANT_ID `
+            -ApplicationId $env:AZURE_CLIENT_ID `
+            -Credential (New-Object System.Management.Automation.PSCredential($env:AZURE_CLIENT_ID, (ConvertTo-SecureString $env:AZURE_CLIENT_SECRET -AsPlainText -Force)))
+
       - name: Run Pester tests
         shell: pwsh
         run: |
