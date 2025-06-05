@@ -9,35 +9,40 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}   # checkout the correct branch name
+          fetch-depth: 0
 
-      - name: Setup PowerShell
-        uses: actions/setup-powershell@v2
+      # - name: Setup PowerShell
+      #   uses: actions/setup-powershell@v2
 
       - name: Install required modules
+        shell: pwsh
         run: |
           Install-Module -Name Pester -Force -Scope CurrentUser
           Install-Module -Name PowerShellGet -Force -Scope CurrentUser
 
       - name: Run Pester tests
+        shell: pwsh
         run: |
           if (Test-Path ./test) {
             Invoke-Pester -Path ./test
           }
 
       - name: Build module artifact
+        shell: pwsh
         run: |
           $moduleManifest = Get-ChildItem -Path . -Filter '*.psd1' -Recurse | Select-Object -First 1
           $moduleName = $moduleManifest.BaseName
           $artifactPath = "$env:GITHUB_WORKSPACE/artifact"
           New-Item -ItemType Directory -Path $artifactPath -Force | Out-Null
           Copy-Item -Path $moduleManifest.Directory.FullName -Destination $artifactPath\$moduleName -Recurse
-        shell: pwsh
 
-      - name: Upload artifact
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: powershell-module
@@ -45,7 +50,7 @@ jobs:
 
   publish:
     needs: build
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Download artifact
