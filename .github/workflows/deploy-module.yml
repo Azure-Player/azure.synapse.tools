@@ -50,10 +50,18 @@ jobs:
       - name: Build module artifact
         shell: pwsh
         run: |
+
           $moduleManifest = Get-ChildItem -Path . -Filter '*.psd1' -Recurse | Select-Object -First 1
           $moduleName = $moduleManifest.BaseName
           $artifactPath = "$env:GITHUB_WORKSPACE/artifact"
+
+          # Build NuGet package (.nupkg) for the PowerShell module
           New-Item -ItemType Directory -Path $artifactPath -Force | Out-Null
+          Publish-Module -Path $moduleManifest.Directory.FullName -NuGetApiKey 'AnyValue' -Repository 'LocalRepo' -Force -SkipAutomaticTags -WhatIf
+          $nupkgFile = Get-ChildItem -Path "$env:USERPROFILE/.local/share/powershell/Modules" -Filter '*.nupkg' -Recurse | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if ($nupkgFile) {
+            Copy-Item -Path $nupkgFile.FullName -Destination $artifactPath
+          }
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\*.ps*1)" -Destination $artifactPath\$moduleName
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\public" -Destination $artifactPath\$moduleName -Recurse
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\private" -Destination $artifactPath\$moduleName -Recurse
