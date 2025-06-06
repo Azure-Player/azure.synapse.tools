@@ -64,15 +64,15 @@ jobs:
           #}
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\*.psm1" -Destination $artifactPath
           Copy-Item -Path "$($moduleManifest.FullName)" -Destination $artifactPath
-          Copy-Item -Path "$($moduleManifest.Directory.FullName)\public" -Destination "$artifactPath\$moduleName\public" -Recurse
-          Copy-Item -Path "$($moduleManifest.Directory.FullName)\private" -Destination "$artifactPath\$moduleName\private" -Recurse
-          Get-ChildItem -Path "$artifactPath\$moduleName" -Recurse
+          Copy-Item -Path "$($moduleManifest.Directory.FullName)\public" -Destination "$artifactPath\public" -Recurse
+          Copy-Item -Path "$($moduleManifest.Directory.FullName)\private" -Destination "$artifactPath\private" -Recurse
+          Get-ChildItem -Path "$artifactPath" -Recurse
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: powershell-module
-          path: "$env:GITHUB_WORKSPACE/artifact/$moduleName"
+          path: "$env:GITHUB_WORKSPACE/artifact"
 
   publish:
     needs: build
