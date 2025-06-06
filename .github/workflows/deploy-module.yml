@@ -54,7 +54,7 @@ jobs:
           $moduleName = $moduleManifest.BaseName
           $artifactPath = "$env:GITHUB_WORKSPACE/artifact"
           New-Item -ItemType Directory -Path $artifactPath -Force | Out-Null
-          Copy-Item -Path "$($moduleManifest.Directory.FullName)\*.ps*1) -Destination $artifactPath\$moduleName
+          Copy-Item -Path "$($moduleManifest.Directory.FullName)\*.ps*1)" -Destination $artifactPath\$moduleName
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\public" -Destination $artifactPath\$moduleName -Recurse
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\private" -Destination $artifactPath\$moduleName -Recurse
 
