@@ -6,6 +6,9 @@ on:
       - main
       - master
   workflow_dispatch:
+env:
+  buildFolderName: output
+  buildArtifactName: output
 
 jobs:
   build:
@@ -53,7 +56,7 @@ jobs:
 
           $moduleManifest = Get-ChildItem -Path . -Filter '*.psd1' -Recurse | Select-Object -First 1
           $moduleName = $moduleManifest.BaseName
-          $artifactPath = "$env:GITHUB_WORKSPACE/artifact"
+          $artifactPath = "${{ env.buildFolderName }}/"
 
           # Build NuGet package (.nupkg) for the PowerShell module
           New-Item -ItemType Directory -Path $artifactPath -Force | Out-Null
@@ -66,13 +69,19 @@ jobs:
           Copy-Item -Path "$($moduleManifest.FullName)" -Destination $artifactPath
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\public" -Destination "$artifactPath\public" -Recurse
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\private" -Destination "$artifactPath\private" -Recurse
-          Get-ChildItem -Path "$artifactPath" -Recurse
+          Get-ChildItem -Path "$artifactPath" -Recurse | ForEach-Object {
+            if ($_.PSIsContainer) {
+              Write-Host "Directory: $($_.FullName)"
+            } else {
+              Write-Host "File: $($_.FullName)"
+            }
+          }
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: powershell-module
-          path: "$env:GITHUB_WORKSPACE/artifact"
+          name: ${{ env.buildArtifactName }}
+          path: ${{ env.buildFolderName }}/
 
   publish:
     needs: build
