@@ -92,5 +92,18 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
         run: |
-          Publish-Module -Path . -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force -AllowPrerelease
+          # Register a local repository
+          $localRepoPath = "./local-repo"
+          if (-not (Test-Path $localRepoPath)) {
+            New-Item -ItemType Directory -Path $localRepoPath | Out-Null
+          }
+          if (-not (Get-PSRepository -Name LocalRepo -ErrorAction SilentlyContinue)) {
+            Register-PSRepository -Name LocalRepo -SourceLocation $localRepoPath -PublishLocation $localRepoPath -InstallationPolicy Trusted
+          }
+
+          # Publish to local repository
+          Publish-Module -Path . -Repository LocalRepo -Force
+
+          # Publish to PSGallery
+          #Publish-Module -Path . -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
         shell: pwsh
