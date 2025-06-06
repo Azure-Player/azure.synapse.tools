@@ -79,6 +79,5 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
         run: |
-          $moduleManifest = Get-ChildItem -Path ./module -Filter '*.psd1' -Recurse | Select-Object -First 1
-          Publish-Module -Path $moduleManifest.Directory.FullName -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
+          Publish-Module -Path ./module -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
         shell: pwsh
