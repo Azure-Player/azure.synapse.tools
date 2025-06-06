@@ -58,24 +58,18 @@ jobs:
           $moduleName = $moduleManifest.BaseName
           $artifactPath = "${{ env.buildFolderName }}/"
 
-          # Build NuGet package (.nupkg) for the PowerShell module
           New-Item -ItemType Directory -Path $artifactPath -Force | Out-Null
-          #Publish-Module -Path $moduleManifest.Directory.FullName -NuGetApiKey 'AnyValue' -Repository 'LocalRepo' -Force -SkipAutomaticTags -WhatIf
-          #$nupkgFile = Get-ChildItem -Path "$env:USERPROFILE/.local/share/powershell/Modules" -Filter '*.nupkg' -Recurse | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-          #if ($nupkgFile) {
-          #  Copy-Item -Path $nupkgFile.FullName -Destination $artifactPath
-          #}
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\*.psm1" -Destination $artifactPath
           Copy-Item -Path "$($moduleManifest.FullName)" -Destination $artifactPath
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\public" -Destination "$artifactPath\public" -Recurse
           Copy-Item -Path "$($moduleManifest.Directory.FullName)\private" -Destination "$artifactPath\private" -Recurse
-          Get-ChildItem -Path "$artifactPath" -Recurse | ForEach-Object {
-            if ($_.PSIsContainer) {
-              Write-Host "Directory: $($_.FullName)"
-            } else {
-              Write-Host "File: $($_.FullName)"
-            }
-          }
+          # Get-ChildItem -Path "$artifactPath" -Recurse | ForEach-Object {
+          #   if ($_.PSIsContainer) {
+          #     Write-Host "Directory: $($_.FullName)"
+          #   } else {
+          #     Write-Host "File: $($_.FullName)"
+          #   }
+          # }
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
@@ -98,14 +92,5 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
         run: |
-          Resolve-Path "."
-          Get-ChildItem -Path "." -Recurse | ForEach-Object {
-            if ($_.PSIsContainer) {
-              Write-Host "Directory: $($_.FullName)"
-            } else {
-              Write-Host "File: $($_.FullName)"
-            }
-          }
-
-          Publish-Module -Path . -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
+          Publish-Module -Path . -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force -AllowPrerelease
         shell: pwsh
