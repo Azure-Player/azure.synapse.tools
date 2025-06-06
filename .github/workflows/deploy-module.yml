@@ -91,7 +91,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: powershell-module
+          name: ${{ env.buildArtifactName }}
           path: ./module
 
       - name: Publish to PSGallery
@@ -99,5 +99,5 @@ jobs:
           NUGET_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
         run: |
           Resolve-Path "."
-          Publish-Module -Path /home/runner/work/azure.synapse.tools/azure.synapse.tools/module -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
+          Publish-Module -Path ./module -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
         shell: pwsh
