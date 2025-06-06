@@ -56,21 +56,22 @@ jobs:
           $artifactPath = "$env:GITHUB_WORKSPACE/artifact"
 
           # Build NuGet package (.nupkg) for the PowerShell module
-          #New-Item -ItemType Directory -Path $artifactPath -Force | Out-Null
+          New-Item -ItemType Directory -Path $artifactPath -Force | Out-Null
           #Publish-Module -Path $moduleManifest.Directory.FullName -NuGetApiKey 'AnyValue' -Repository 'LocalRepo' -Force -SkipAutomaticTags -WhatIf
           #$nupkgFile = Get-ChildItem -Path "$env:USERPROFILE/.local/share/powershell/Modules" -Filter '*.nupkg' -Recurse | Sort-Object LastWriteTime -Descending | Select-Object -First 1
           #if ($nupkgFile) {
           #  Copy-Item -Path $nupkgFile.FullName -Destination $artifactPath
           #}
-          Copy-Item -Path "$($moduleManifest.Directory.FullName)\azure.synapse.tools.ps*)" -Destination $artifactPath\$moduleName
-          Copy-Item -Path "$($moduleManifest.Directory.FullName)\public" -Destination $artifactPath\$moduleName -Recurse
-          Copy-Item -Path "$($moduleManifest.Directory.FullName)\private" -Destination $artifactPath\$moduleName -Recurse
+          Copy-Item -Path "$($moduleManifest.Directory.FullName)\*.psm1" -Destination $artifactPath
+          Copy-Item -Path "$($moduleManifest.FullName)" -Destination $artifactPath
+          Copy-Item -Path "$($moduleManifest.Directory.FullName)\public" -Destination "$artifactPath\$moduleName\public" -Recurse
+          Copy-Item -Path "$($moduleManifest.Directory.FullName)\private" -Destination "$artifactPath\$moduleName\private" -Recurse
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: powershell-module
-          path: artifact/
+          path: "$env:GITHUB_WORKSPACE/artifact"
 
   publish:
     needs: build
