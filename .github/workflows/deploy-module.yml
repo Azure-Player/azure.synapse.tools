@@ -99,5 +99,13 @@ jobs:
           NUGET_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
         run: |
           Resolve-Path "."
+          Get-ChildItem -Path "." -Recurse | ForEach-Object {
+            if ($_.PSIsContainer) {
+              Write-Host "Directory: $($_.FullName)"
+            } else {
+              Write-Host "File: $($_.FullName)"
+            }
+          }
+
           Publish-Module -Path ./module -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
         shell: pwsh
