@@ -79,5 +79,6 @@ jobs:
         env:
           NUGET_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
         run: |
-          Publish-Module -Path ./module -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
+          Resolve-Path "."
+          Publish-Module -Path /home/runner/work/azure.synapse.tools/azure.synapse.tools/module -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
         shell: pwsh
