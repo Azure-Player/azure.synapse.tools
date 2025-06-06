@@ -92,7 +92,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.buildArtifactName }}
-          path: ./module
+          path: .
 
       - name: Publish to PSGallery
         env:
@@ -107,5 +107,5 @@ jobs:
             }
           }
 
-          Publish-Module -Path ./module -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
+          Publish-Module -Path . -NuGetApiKey $env:NUGET_API_KEY -Repository PSGallery -Force
         shell: pwsh
