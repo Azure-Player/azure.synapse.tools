@@ -1,3 +1,8 @@
+[![Build status](https://dev.azure.com/sqlplayer/azure.datafactory.tools/_apis/build/status/azure.synapse.tools-CI)](https://dev.azure.com/sqlplayer/azure.datafactory.tools/_build/latest?definitionId=63)
+![PSGalleryStatus](https://vsrm.dev.azure.com/sqlplayer/_apis/public/Release/badge/ee3bd4b9-1ccf-4a86-89a0-a9d5dcd1918a/7/11)
+[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/azure.synapse.tools?label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/azure.synapse.tools)
+![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/azure.synapse.tools?color=yellow)
+
 # azure.synapse.tools
 <img style="float: right;" src="./images/Azure-Synapse-tools-256-logo.png" width="256px">
 
