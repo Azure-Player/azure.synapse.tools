@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.27.0] - 2025-08-26
+* Fixed: Getting Azure Access Token not failing under AzurePowerShell 5.257.0 task in AzDO (#44)
+
 ## [0.26.0] - 2025-06-05
 * Fixed: Supports for Az.Accounts v.5.0 and its breaking change in terms of `Get-AzAccessToken` #41 (thanks [vi7us](https://github.com/vi7us) !)
 
